@@ -1,8 +1,8 @@
 //
-//  APIRequest.swift
+//  Request.swift
 //  WeatherApp
 //
-//  Created by Jeffrey Cheung on 8/8/2022.
+//  Created by Jeffrey Cheung on 9/8/2022.
 //
 
 import Foundation
@@ -53,7 +53,7 @@ extension Request {
         return httpBody
     }
     
-    private func requestURLRequest(baseURL: String) -> URLRequest? {
+    func requestURLRequest(baseURL: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: baseURL) else {
             return nil
         }
