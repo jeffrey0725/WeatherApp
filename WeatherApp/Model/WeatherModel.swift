@@ -7,6 +7,16 @@
 
 import Foundation
 
+// MARK: - DATA TYPE
+struct DataType {
+    var localWeatherForecast: String = "flw"
+    var nineDaysWeatherForecast: String = "fnd"
+    var currentWeatherReport: String = "rhrread"
+    var weatherWarningSummary: String = "warnsum"
+    var weatherWarningInformation: String = "warningIndo"
+    var specialWeatherTips: String = "swt"
+}
+
 // MARK: - DATA MODEL
 struct LocalWeatherForecast: Codable {
     var generalSituation: String?
@@ -16,10 +26,4 @@ struct LocalWeatherForecast: Codable {
     var forecastDesc: String?
     var outlook: String?
     var updateTime: String?
-}
-
-// MARK: - REQUEST
-struct RequestLocalWeatherForecast: Request {
-    typealias ReturnType = LocalWeatherForecast
-    var path: String = ""
 }
