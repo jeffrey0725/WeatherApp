@@ -8,25 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var localWeatherForecast = LocalWeatherForecast()
     var body: some View {
-        NavigationView {
-            VStack {
-                Text(localWeatherForecast.forecastDesc ?? "")
-                    .padding()
-            }
-            .toolbar(content: {
-                NavigationLink(destination: SettingView(), label: {
-                    Image(systemName: "gearshape")
-                })
-                    .buttonStyle(.plain)
-            })
-            .onAppear(perform: {
-                APIManager().getLocalWeatherForcast(dataType: DataType().localWeatherForecast, lang: "en", completed: { (result) in
-                    self.localWeatherForecast = result
-                })
-            })
-        }
+        HomeView()
     }
 }
 
