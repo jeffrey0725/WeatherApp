@@ -11,9 +11,13 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink(destination: WeatherInfoView(weatherViewModel: WeatherViewModel()), label: {
-                    Text("Weather Information")
+                NavigationLink(destination: LocalWeatherInfoView(weatherType: DataType().localWeatherForecast, weatherViewModel: WeatherViewModel()), label: {
+                    Text("Local Weather Forecast")
                 })
+                
+//                NavigationLink(destination: WeatherInfoView(weatherType: DataType().nineDayWeatherForecast, weatherViewModel: WeatherViewModel()), label: {
+//                    Text("9-day Weather Forecast")
+//                })
             }
             .listStyle(.plain)
             .navigationTitle("Home")

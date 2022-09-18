@@ -10,7 +10,7 @@ import Foundation
 // MARK: - DATA TYPE
 struct DataType {
     var localWeatherForecast: String = "flw"
-    var nineDaysWeatherForecast: String = "fnd"
+    var nineDayWeatherForecast: String = "fnd"
     var currentWeatherReport: String = "rhrread"
     var weatherWarningSummary: String = "warnsum"
     var weatherWarningInformation: String = "warningIndo"
@@ -26,4 +26,37 @@ struct LocalWeatherForecast: Codable {
     var forecastDesc: String?
     var outlook: String?
     var updateTime: String?
+}
+
+struct NineDayWeatherForecast: Codable {
+    var generalSituation: String?
+    var weatherForecast: [WeatherForecast]?
+    var updateTime: String?
+    
+}
+
+struct WeatherForecast: Codable {
+    var forecastDate: String?
+    var week: String?
+    var forecastWind: String?
+    var forecastWeather: String?
+    var forecastMaxtemp: ForecastValueWithUnit?
+    var forecastMintemp: ForecastValueWithUnit?
+    var forecastMaxrh: ForecastValueWithUnit?
+    var forecastMinrh: ForecastValueWithUnit?
+    var ForecastIcon: Int?
+    var PSR: String?
+}
+
+struct ForecastValueWithUnit: Codable {
+    var value: String?
+    var unit: String?
+}
+
+struct otherTemp: Codable {
+    var place: String?
+    var value: Float?
+    var unit: String?
+    var recordTime: String?
+    var depth: ForecastValueWithUnit?
 }
