@@ -15,9 +15,9 @@ struct HomeView: View {
                     Text("Local Weather Forecast")
                 })
                 
-//                NavigationLink(destination: WeatherInfoView(weatherType: DataType().nineDayWeatherForecast, weatherViewModel: WeatherViewModel()), label: {
-//                    Text("9-day Weather Forecast")
-//                })
+                NavigationLink(destination: NineDayWeatherInfoView(weatherType: DataType().nineDayWeatherForecast, weatherViewModel: WeatherViewModel()), label: {
+                    Text("9-day Weather Forecast")
+                })
             }
             .listStyle(.plain)
             .navigationTitle("Home")

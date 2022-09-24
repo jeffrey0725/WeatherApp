@@ -28,11 +28,17 @@ struct LocalWeatherInfoView: View {
     
     private func getLocalWeather() {
         // Check system language code
-        let langStr = Locale.current.languageCode
+        var langCode: String = ""
+        if #available(iOS 16, *) {
+            langCode = Locale.current.language.languageCode?.identifier ?? "en"
+        } else {
+            // Fallback on earlier versions
+            langCode = Locale.current.languageCode ?? "en"
+        }
         
         // For language code, will apply system language code, default "en"
         // For weather type which is passed from previous page
-        weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: langStr ?? "en", completed: { (result) in
+        weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: langCode, completed: { (result) in
             self.localWeatherForecast = result
         })
     }
