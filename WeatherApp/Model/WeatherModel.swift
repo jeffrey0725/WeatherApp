@@ -49,7 +49,7 @@ struct WeatherForecast: Codable {
 }
 
 struct ForecastValueWithUnit: Codable {
-    var value: String?
+    var value: Int?
     var unit: String?
 }
 

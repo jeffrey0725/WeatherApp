@@ -13,7 +13,25 @@ struct NineDayWeatherInfoView: View {
     @ObservedObject var weatherViewModel: WeatherViewModel
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            VStack(alignment: .leading) {
+                Text("Nine days weather info")
+                
+                ForEach(nineDayWeatherForecast.weatherForecast ?? [], id: \.forecastDate) { (data) in
+                    DailyWeatherDetailView(weatherForecast: data)
+                }
+                
+                Spacer()
+                
+                Text("General Situation")
+                	
+            }
+        }
+        .onAppear(perform: {
+            getNineDayWeatherForecast()
+        })
+        .navigationTitle("Nine days weather info")
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     private func getNineDayWeatherForecast() {
@@ -24,6 +42,20 @@ struct NineDayWeatherInfoView: View {
             // Fallback on earlier versions
             langCode = Locale.current.languageCode ?? "en"
         }
+        
+        var urlComponents = URLComponents(string: weatherViewModel.baseUrl)
+        urlComponents?.queryItems = [
+            URLQueryItem(name: "dataType", value: DataType().nineDayWeatherForecast),
+            URLQueryItem(name: "lang", value: langCode)
+        ]
+        
+        guard let urlComponents = urlComponents else {
+            return
+        }
+        
+        weatherViewModel.getNineDayWeatherForecast(urlComponents: urlComponents, completed: { (result) in
+            self.nineDayWeatherForecast = result
+        })
     }
 }
 
