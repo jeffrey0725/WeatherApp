@@ -12,15 +12,26 @@ struct DailyWeatherDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(weatherForecast.forecastDate ?? "")
-                .font(.title)
+            Text("\(weatherForecast.forecastDate ?? "") (\(weatherForecast.week ?? ""))")
+                .font(.title2)
             
             HStack {
                 Text(weatherForecast.forecastWeather ?? "")
                     .font(.subheadline)
+                Spacer()
+                AsyncImage(url: URL(string: "https://www.hko.gov.hk/images/HKOWxIconOutline/pic\(weatherForecast.ForecastIcon ?? 0).png"), content: { (image) in
+                    image.resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 50, height: 50)
+                        .background(Color.blue)
+                        .cornerRadius(5)
+                }, placeholder: {
+                    ProgressView()
+                })
             }
         }
-        .padding()
+        .padding(.top, 10)
+        .padding(.bottom, 10)
     }
 }
 

@@ -16,17 +16,19 @@ struct NineDayWeatherInfoView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 Text("Nine days weather info")
-                
+                    .font(.title)
                 ForEach(nineDayWeatherForecast.weatherForecast ?? [], id: \.forecastDate) { (data) in
                     DailyWeatherDetailView(weatherForecast: data)
                 }
-                
                 Spacer()
-                
                 Text("General Situation")
-                	
+                    .font(.title)
+                Text("\(nineDayWeatherForecast.generalSituation ?? "")")
+                    .font(.subheadline)
             }
         }
+        .padding(.leading, 10)
+        .padding(.trailing, 10)
         .onAppear(perform: {
             getNineDayWeatherForecast()
         })
