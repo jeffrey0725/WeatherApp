@@ -15,13 +15,13 @@ struct NineDayWeatherInfoView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Text("Nine days weather info")
+                Text(LocalizedStringKey("nine_weather_title"))
                     .font(.title)
                 ForEach(nineDayWeatherForecast.weatherForecast ?? [], id: \.forecastDate) { (data) in
                     DailyWeatherDetailView(weatherForecast: data)
                 }
                 Spacer()
-                Text("General Situation")
+                Text(LocalizedStringKey("general_situtation"))
                     .font(.title)
                 Text("\(nineDayWeatherForecast.generalSituation ?? "")")
                     .font(.subheadline)
@@ -32,23 +32,23 @@ struct NineDayWeatherInfoView: View {
         .onAppear(perform: {
             getNineDayWeatherForecast()
         })
-        .navigationTitle("Nine days weather info")
+        .navigationTitle(LocalizedStringKey("nine_weather_title"))
         .navigationBarTitleDisplayMode(.inline)
     }
     
     private func getNineDayWeatherForecast() {
-        var langCode: String = ""
+        var systemCode: String = ""
         if #available(iOS 16, *) {
-            langCode = Locale.current.language.languageCode?.identifier ?? "en"
+            systemCode = Locale.current.language.languageCode?.identifier ?? "en"
         } else {
             // Fallback on earlier versions
-            langCode = Locale.current.languageCode ?? "en"
+            systemCode = Locale.current.languageCode ?? "en"
         }
         
         var urlComponents = URLComponents(string: weatherViewModel.baseUrl)
         urlComponents?.queryItems = [
             URLQueryItem(name: "dataType", value: DataType().nineDayWeatherForecast),
-            URLQueryItem(name: "lang", value: langCode)
+            URLQueryItem(name: "lang", value: getCode(systemCode))
         ]
         
         guard let urlComponents = urlComponents else {
@@ -58,6 +58,17 @@ struct NineDayWeatherInfoView: View {
         weatherViewModel.getNineDayWeatherForecast(urlComponents: urlComponents, completed: { (result) in
             self.nineDayWeatherForecast = result
         })
+    }
+    
+    private func getCode(_ systemLangCode: String) -> String {
+        switch systemLangCode {
+        case "en":
+            return "en"
+        case "zh":
+            return "tc"
+        default:
+            return "tc"
+        }
     }
 }
 

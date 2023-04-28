@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  WeatherApp
+
+  Created by Jeffrey Cheung on 28/4/2023.
+  
+*/
+
+"nine_weather_title" = "Nine days weather info";
+"home_view_title" = "Menu";
+"local_weather_title" = "Local Weather Forecast";
+"general_situtation" = "General Situtation";

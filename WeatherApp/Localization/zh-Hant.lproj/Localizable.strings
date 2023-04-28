@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  WeatherApp
+
+  Created by Jeffrey Cheung on 28/4/2023.
+  
+*/
+
+"nine_weather_title" = "九天天氣預報";
+"home_view_title" = "目錄";
+"local_weather_title" = "本港地區天氣預報";
+"general_situtation" = "概況";

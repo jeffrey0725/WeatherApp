@@ -19,6 +19,7 @@
 		214A905028D699D5005F0F9C /* LocalWeatherInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214A904F28D699D5005F0F9C /* LocalWeatherInfoView.swift */; };
 		214A905228D69E19005F0F9C /* NineDayWeatherInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214A905128D69E19005F0F9C /* NineDayWeatherInfoView.swift */; };
 		2170DCC528A282A30098EE95 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2170DCC428A282A30098EE95 /* WeatherModel.swift */; };
+		219D0EDC29FC0BD20088174A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 219D0EDE29FC0BD20088174A /* Localizable.strings */; };
 		21ABAA7C28E5D284002A2A1C /* DailyWeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ABAA7B28E5D284002A2A1C /* DailyWeatherDetailView.swift */; };
 		21F05EF028BE9A0800C7FED8 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F05EEF28BE9A0800C7FED8 /* SettingView.swift */; };
 /* End PBXBuildFile section */
@@ -56,6 +57,8 @@
 		214A904F28D699D5005F0F9C /* LocalWeatherInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWeatherInfoView.swift; sourceTree = "<group>"; };
 		214A905128D69E19005F0F9C /* NineDayWeatherInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineDayWeatherInfoView.swift; sourceTree = "<group>"; };
 		2170DCC428A282A30098EE95 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
+		219D0EDF29FC0BD70088174A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		219D0EE029FC0BE70088174A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		21ABAA7B28E5D284002A2A1C /* DailyWeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeatherDetailView.swift; sourceTree = "<group>"; };
 		21F05EEF28BE9A0800C7FED8 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +111,7 @@
 		2113968C28A18F960071952B /* WeatherApp */ = {
 			isa = PBXGroup;
 			children = (
+				219D0ED929FC0A780088174A /* Localization */,
 				21ABAA7A28E5D20B002A2A1C /* CustomView */,
 				214A904A28D1AD1E005F0F9C /* View */,
 				214A904728D1A913005F0F9C /* ViewModel */,
@@ -170,6 +174,14 @@
 				2170DCC428A282A30098EE95 /* WeatherModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		219D0ED929FC0A780088174A /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				219D0EDE29FC0BD20088174A /* Localizable.strings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		21ABAA7A28E5D20B002A2A1C /* CustomView */ = {
@@ -268,6 +280,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hant",
 			);
 			mainGroup = 2113968128A18F960071952B;
 			packageReferences = (
@@ -289,6 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2113969528A18F990071952B /* Preview Assets.xcassets in Resources */,
+				219D0EDC29FC0BD20088174A /* Localizable.strings in Resources */,
 				2113969228A18F990071952B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -357,6 +371,18 @@
 			targetProxy = 211396A528A18F990071952B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		219D0EDE29FC0BD20088174A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				219D0EDF29FC0BD70088174A /* en */,
+				219D0EE029FC0BE70088174A /* zh-Hant */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		211396AC28A18F990071952B /* Debug */ = {
