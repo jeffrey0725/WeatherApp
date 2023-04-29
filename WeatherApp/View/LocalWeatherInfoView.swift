@@ -22,7 +22,7 @@ struct LocalWeatherInfoView: View {
                 .padding(.trailing, 20)
             Spacer()
         }
-        .navigationTitle("Local Weather Information")
+        .navigationTitle(LocalizedStringKey("local_weather_title"))
         .navigationBarTitleDisplayMode(.inline)
     }
     
@@ -36,7 +36,7 @@ struct LocalWeatherInfoView: View {
             systemCode = Locale.current.languageCode ?? "en"
         }
         
-        // For language code, will apply system language code, default "en"
+        // For language code, will apply system language code, default "tc"
         // For weather type which is passed from previous page
         weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: getLangCode(systemCode), completed: { (result) in
             self.localWeatherForecast = result
