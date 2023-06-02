@@ -36,19 +36,11 @@ struct NineDayWeatherInfoView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    private func getNineDayWeatherForecast() {
-        var systemCode: String = ""
-        if #available(iOS 16, *) {
-            systemCode = Locale.current.language.languageCode?.identifier ?? "en"
-        } else {
-            // Fallback on earlier versions
-            systemCode = Locale.current.languageCode ?? "en"
-        }
-        
+    func getNineDayWeatherForecast() {
         var urlComponents = URLComponents(string: weatherViewModel.baseUrl)
         urlComponents?.queryItems = [
             URLQueryItem(name: "dataType", value: DataType().nineDayWeatherForecast),
-            URLQueryItem(name: "lang", value: getCode(systemCode))
+            URLQueryItem(name: "lang", value: Utils().getApiLanguageCode())
         ]
         
         guard let urlComponents = urlComponents else {
@@ -58,17 +50,6 @@ struct NineDayWeatherInfoView: View {
         weatherViewModel.getNineDayWeatherForecast(urlComponents: urlComponents, completed: { (result) in
             self.nineDayWeatherForecast = result
         })
-    }
-    
-    private func getCode(_ systemLangCode: String) -> String {
-        switch systemLangCode {
-        case "en":
-            return "en"
-        case "zh":
-            return "tc"
-        default:
-            return "tc"
-        }
     }
 }
 

@@ -18,6 +18,10 @@ struct HomeView: View {
                 NavigationLink(destination: NineDayWeatherInfoView(weatherType: DataType().nineDayWeatherForecast, weatherViewModel: WeatherViewModel()), label: {
                     Text(LocalizedStringKey("nine_weather_title"))
                 })
+                
+                NavigationLink(destination: RegionWeatherInfoView(), label: {
+                    Text(LocalizedStringKey("region_weather_title"))
+                })
             }
             .listStyle(.plain)
             .navigationTitle(LocalizedStringKey("home_view_title"))

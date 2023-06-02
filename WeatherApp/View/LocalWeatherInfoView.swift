@@ -26,32 +26,12 @@ struct LocalWeatherInfoView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    private func getLocalWeather() {
-        // Check system language code
-        var systemCode: String = ""
-        if #available(iOS 16, *) {
-            systemCode = Locale.current.language.languageCode?.identifier ?? "en"
-        } else {
-            // Fallback on earlier versions
-            systemCode = Locale.current.languageCode ?? "en"
-        }
-        
+    func getLocalWeather() {
         // For language code, will apply system language code, default "tc"
         // For weather type which is passed from previous page
-        weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: getLangCode(systemCode), completed: { (result) in
+        weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: Utils().getApiLanguageCode(), completed: { (result) in
             self.localWeatherForecast = result
         })
-    }
-    
-    private func getLangCode(_ systemCode: String) -> String {
-        switch systemCode {
-        case "en":
-            return "en"
-        case "zh":
-            return "tc"
-        default:
-            return "tc"
-        }
     }
 }
 
