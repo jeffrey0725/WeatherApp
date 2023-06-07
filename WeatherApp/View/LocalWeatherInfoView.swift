@@ -18,8 +18,7 @@ struct LocalWeatherInfoView: View {
                 .onAppear(perform: {
                     getLocalWeather()
                 })
-                .padding(.leading, 20)
-                .padding(.trailing, 20)
+                .padding([.leading, .trailing], 20)
             Spacer()
         }
         .navigationTitle(LocalizedStringKey("local_weather_title"))
@@ -29,7 +28,7 @@ struct LocalWeatherInfoView: View {
     func getLocalWeather() {
         // For language code, will apply system language code, default "tc"
         // For weather type which is passed from previous page
-        weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: Utils().getApiLanguageCode(), completed: { (result) in
+        weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: Utils().getApiLanguageCode(), completed: {(result) in
             self.localWeatherForecast = result
         })
     }

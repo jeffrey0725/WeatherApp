@@ -32,7 +32,11 @@ struct NineDayWeatherForecast: Codable {
     var generalSituation: String?
     var weatherForecast: [WeatherForecast]?
     var updateTime: String?
-    
+}
+
+struct RegionWeatherForecast: Codable {
+    var rainfall: rainfallInfo?
+    var updateTime: String?
 }
 
 struct CurrentWeatherReport: Codable {
@@ -67,4 +71,16 @@ struct otherTemp: Codable {
 
 struct LightningInfo: Codable {
     
+}
+
+struct rainfallInfo: Codable {
+    var data: [regionRainfallData]?
+}
+
+struct regionRainfallData: Codable {
+    var unit: String?
+    var place: String?
+    var min: Double?
+    var max: Double?
+    var main: String?
 }

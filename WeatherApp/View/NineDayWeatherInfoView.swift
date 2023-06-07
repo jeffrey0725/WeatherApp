@@ -17,7 +17,7 @@ struct NineDayWeatherInfoView: View {
             VStack(alignment: .leading) {
                 Text(LocalizedStringKey("nine_weather_title"))
                     .font(.title)
-                ForEach(nineDayWeatherForecast.weatherForecast ?? [], id: \.forecastDate) { (data) in
+                ForEach(nineDayWeatherForecast.weatherForecast ?? [], id: \.forecastDate) {(data) in
                     DailyWeatherDetailView(weatherForecast: data)
                 }
                 Spacer()
@@ -27,8 +27,7 @@ struct NineDayWeatherInfoView: View {
                     .font(.subheadline)
             }
         }
-        .padding(.leading, 10)
-        .padding(.trailing, 10)
+        .padding([.leading, .trailing], 10)
         .onAppear(perform: {
             getNineDayWeatherForecast()
         })
@@ -47,7 +46,7 @@ struct NineDayWeatherInfoView: View {
             return
         }
         
-        weatherViewModel.getNineDayWeatherForecast(urlComponents: urlComponents, completed: { (result) in
+        weatherViewModel.getNineDayWeatherForecast(urlComponents: urlComponents, completed: {(result) in
             self.nineDayWeatherForecast = result
         })
     }

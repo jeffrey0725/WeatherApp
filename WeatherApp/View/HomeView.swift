@@ -19,7 +19,7 @@ struct HomeView: View {
                     Text(LocalizedStringKey("nine_weather_title"))
                 })
                 
-                NavigationLink(destination: RegionWeatherInfoView(), label: {
+                NavigationLink(destination: RegionWeatherInfoView(weatherType: DataType().currentWeatherReport, weatherViewModel: WeatherViewModel()), label: {
                     Text(LocalizedStringKey("region_weather_title"))
                 })
             }

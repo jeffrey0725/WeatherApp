@@ -20,7 +20,6 @@ struct SettingView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading, content: {
                 Button(action: {
-                    print("--------BACK PRESSED--------")
                     self.presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Image(systemName: "arrow.backward")
