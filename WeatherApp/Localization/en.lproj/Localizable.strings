@@ -11,3 +11,4 @@
 "local_weather_title" = "Local Weather Forecast";
 "general_situtation" = "General Situtation";
 "region_weather_title" = "Current Weather Report";
+"region_weather_rainfall_title" = "Region Rainfall Info";

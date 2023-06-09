@@ -12,10 +12,20 @@ struct RegionWeatherInfoView: View {
     @State var weatherType: String
     @ObservedObject var weatherViewModel: WeatherViewModel
     var body: some View {
-        ScrollView {
-            VStack {
-                Text("Hello World")
-            }
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(alignment: .leading, content: {
+                Text(LocalizedStringKey("region_weather_rainfall_title"))
+                    .padding([.top], 10)
+                    .font(.title)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(regionWeatherForecast.rainfall?.data ?? [], id: \.place) {(data) in
+                            RegionalWeatherDetailView(regionRainfallData: data)
+                        }
+                    }
+                }
+                .padding([.leading, .trailing], 10)
+            })
         }
         .padding([.leading, .trailing], 10)
         .onAppear(perform: {
@@ -37,7 +47,7 @@ struct RegionWeatherInfoView: View {
         }
         
         weatherViewModel.getRegionWeatherForecast(urlComponents: urlComponents, completed: {(result) in
-            
+            self.regionWeatherForecast = result
         })
     }
 }
