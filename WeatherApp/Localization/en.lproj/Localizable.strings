@@ -12,3 +12,6 @@
 "general_situtation" = "General Situtation";
 "region_weather_title" = "Current Weather Report";
 "region_weather_rainfall_title" = "Region Rainfall Info";
+"region_weather_rainfall_max" = "Max";
+"region_weather_rainfall_min" = "Min";
+"last_updated" = "Last updated";

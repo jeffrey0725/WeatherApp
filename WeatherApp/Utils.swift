@@ -27,4 +27,25 @@ class Utils: NSObject {
             return Locale.current.languageCode ?? "en"
         }
     }
+    
+    func getCurrentDate(dateFormat: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormat
+        dateFormatter.timeZone = .current
+        return dateFormatter.string(from: Date.now)
+    }
+}
+
+// MARK: - Extension for String
+
+enum Language: String {
+    case english_us = "en"
+    case traditional_chinese = "zh"
+}
+
+extension String {
+    func localized(_ language: Language) {
+        let path = Bundle.main.path(forResource: language.rawValue, ofType: "lproj")
+        
+    }
 }

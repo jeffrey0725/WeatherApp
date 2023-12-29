@@ -12,7 +12,9 @@ struct RegionalWeatherDetailView: View {
     var body: some View {
         VStack {
             Text("\(regionRainfallData.place ?? "")")
-            Text("Max: \(regionRainfallData.max ?? 0)")
+            Text("\(String(localized: "region_weather_rainfall_max")): \(regionRainfallData.max ?? 0)\(regionRainfallData.unit ?? "")")
+                .padding([.leading, .trailing], 5)
+            Text("\(String(localized: "region_weather_rainfall_min")): \(regionRainfallData.min ?? 0)\(regionRainfallData.unit ?? "")")
                 .padding([.leading, .trailing], 5)
         }
         .background(Color.yellow)

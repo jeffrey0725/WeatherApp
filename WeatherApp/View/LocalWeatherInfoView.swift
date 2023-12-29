@@ -21,7 +21,7 @@ struct LocalWeatherInfoView: View {
                 .padding([.leading, .trailing], 20)
             Spacer()
         }
-        .navigationTitle(LocalizedStringKey("local_weather_title"))
+        .navigationTitle(String(localized: "local_weather_title"))
         .navigationBarTitleDisplayMode(.inline)
     }
     

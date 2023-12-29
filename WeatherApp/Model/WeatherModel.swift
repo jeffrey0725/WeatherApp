@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - DATA TYPE
+// MARK: - Data type
 struct DataType {
     var localWeatherForecast: String = "flw"
     var nineDayWeatherForecast: String = "fnd"
@@ -17,7 +17,7 @@ struct DataType {
     var specialWeatherTips: String = "swt"
 }
 
-// MARK: - DATA MODEL
+// MARK: - Data model
 struct LocalWeatherForecast: Codable {
     var generalSituation: String?
     var tcInfo: String?
@@ -37,10 +37,8 @@ struct NineDayWeatherForecast: Codable {
 struct RegionWeatherForecast: Codable {
     var rainfall: RainfallInfo?
     var updateTime: String?
-}
-
-struct CurrentWeatherReport: Codable {
     var lightning: LightningInfo?
+    var temperature: TemperatureInfo?
 }
 
 struct WeatherForecast: Codable {
@@ -70,7 +68,12 @@ struct OtherTemp: Codable {
 }
 
 struct LightningInfo: Codable {
-    
+    var data: [RegionLightningData]?
+}
+
+struct RegionLightningData: Codable {
+    var place: String?
+    var occur: String?
 }
 
 struct RainfallInfo: Codable {
@@ -80,7 +83,18 @@ struct RainfallInfo: Codable {
 struct RegionRainfallData: Codable {
     var unit: String?
     var place: String?
-    var min: Double?
-    var max: Double?
+    var min: Int?
+    var max: Int?
     var main: String?
+}
+
+struct TemperatureInfo: Codable {
+    var data: [TemperatureData]?
+    var recordTime: String?
+}
+
+struct TemperatureData: Codable {
+    var place: String?
+    var unit: String?
+    var value: Int?
 }

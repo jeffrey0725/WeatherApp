@@ -12,19 +12,19 @@ struct HomeView: View {
         NavigationView {
             List {
                 NavigationLink(destination: LocalWeatherInfoView(weatherType: DataType().localWeatherForecast, weatherViewModel: WeatherViewModel()), label: {
-                    Text(LocalizedStringKey("local_weather_title"))
+                    Text(String(localized: "local_weather_title"))
                 })
                 
                 NavigationLink(destination: NineDayWeatherInfoView(weatherType: DataType().nineDayWeatherForecast, weatherViewModel: WeatherViewModel()), label: {
-                    Text(LocalizedStringKey("nine_weather_title"))
+                    Text(String(localized: "nine_weather_title"))
                 })
                 
                 NavigationLink(destination: RegionWeatherInfoView(weatherType: DataType().currentWeatherReport, weatherViewModel: WeatherViewModel()), label: {
-                    Text(LocalizedStringKey("region_weather_title"))
+                    Text(String(localized: "region_weather_title"))
                 })
             }
             .listStyle(.plain)
-            .navigationTitle(LocalizedStringKey("home_view_title"))
+            .navigationTitle(String(localized: "home_view_title"))
         }
     }
 }

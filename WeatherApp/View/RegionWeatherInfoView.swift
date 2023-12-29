@@ -10,29 +10,44 @@ import SwiftUI
 struct RegionWeatherInfoView: View {
     @State var regionWeatherForecast = RegionWeatherForecast()
     @State var weatherType: String
+    
     @ObservedObject var weatherViewModel: WeatherViewModel
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, content: {
-                Text(LocalizedStringKey("region_weather_rainfall_title"))
-                    .padding([.top], 10)
-                    .font(.title)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(regionWeatherForecast.rainfall?.data ?? [], id: \.place) {(data) in
-                            RegionalWeatherDetailView(regionRainfallData: data)
+                Text("\(String(localized: "last_updated")): \(Utils().getCurrentDate(dateFormat: "yyyy-MM-dd HH:mm:ss"))")
+                
+                if regionWeatherForecast.rainfall?.data?.count ?? 0 > 0 {
+                    Text(String(localized: "region_weather_rainfall_title"))
+                        .padding([.top], 10)
+                        .font(.title)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(regionWeatherForecast.rainfall?.data ?? [], id: \.place) {(data) in
+                                RegionalWeatherDetailView(regionRainfallData: data)
+                            }
                         }
                     }
                 }
-                .padding([.leading, .trailing], 10)
+                
+                if regionWeatherForecast.lightning?.data?.count ?? 0 > 0 {
+                    //Todo: Thunder warning detail view
+                    Text("Thunder Warning")
+                }
+                
+                
             })
         }
         .padding([.leading, .trailing], 10)
         .onAppear(perform: {
             getRegionWeatherForecast()
         })
-        .navigationTitle(LocalizedStringKey("region_weather_title"))
+        .navigationTitle(String(localized: "region_weather_title"))
         .navigationBarTitleDisplayMode(.inline)
+        .refreshable {
+            getRegionWeatherForecast()
+        }
     }
     
     func getRegionWeatherForecast() {

@@ -15,13 +15,13 @@ struct NineDayWeatherInfoView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Text(LocalizedStringKey("nine_weather_title"))
+                Text(String(localized: "nine_weather_title"))
                     .font(.title)
                 ForEach(nineDayWeatherForecast.weatherForecast ?? [], id: \.forecastDate) {(data) in
                     DailyWeatherDetailView(weatherForecast: data)
                 }
                 Spacer()
-                Text(LocalizedStringKey("general_situtation"))
+                Text(String(localized: "general_situtation"))
                     .font(.title)
                 Text("\(nineDayWeatherForecast.generalSituation ?? "")")
                     .font(.subheadline)
@@ -31,7 +31,7 @@ struct NineDayWeatherInfoView: View {
         .onAppear(perform: {
             getNineDayWeatherForecast()
         })
-        .navigationTitle(LocalizedStringKey("nine_weather_title"))
+        .navigationTitle(String(localized: "nine_weather_title"))
         .navigationBarTitleDisplayMode(.inline)
     }
     
