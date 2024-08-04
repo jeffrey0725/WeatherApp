@@ -14,14 +14,17 @@ struct RegionalWeatherDetailView: View {
         VStack {
             if let topTitle = regionalWeatherDetail.topTitle {
                 Text(topTitle)
+                    .multilineTextAlignment(.center)
                     .padding([.leading, .trailing], 5)
             }
             if let middleTitle = regionalWeatherDetail.middleTitle {
                 Text(middleTitle)
+                    .multilineTextAlignment(.center)
                     .padding([.leading, .trailing], 5)
             }
             if let bottomTitle = regionalWeatherDetail.bottomTitle {
                 Text(bottomTitle)
+                    .multilineTextAlignment(.center)
                     .padding([.leading, .trailing], 5)
             }
         }
