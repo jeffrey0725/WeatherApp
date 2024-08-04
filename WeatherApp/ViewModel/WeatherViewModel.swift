@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class WeatherViewModel: ObservableObject {
     @Published var baseUrl: String = "https://data.weather.gov.hk/weatherAPI/opendata/weather.php"

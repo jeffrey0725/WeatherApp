@@ -24,19 +24,27 @@ struct RegionWeatherInfoView: View {
                         .font(.title)
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
-                            ForEach(regionWeatherForecast.rainfall?.data ?? [], id: \.place) {(data) in
-                                RegionalWeatherDetailView(regionRainfallData: data)
+                            ForEach(regionWeatherForecast.rainfall?.data ?? [], id: \.place) { (data) in
+                                let regionalWeatherDetail: RegionalWeatherDetail = RegionalWeatherDetail(topTitle: data.place ?? "", middleTitle: String(data.max ?? 0), bottomTitle: String(data.min ?? 0))
+                                RegionalWeatherDetailView(regionalWeatherDetail: regionalWeatherDetail)
                             }
                         }
                     }
                 }
                 
-                if regionWeatherForecast.lightning?.data?.count ?? 0 > 0 {
-                    //Todo: Thunder warning detail view
-                    Text("Thunder Warning")
+                if regionWeatherForecast.rainfall?.data?.count ?? 0 > 0 {
+                    Text(String(localized: "region_weather_temperature_title"))
+                        .padding([.top], 10)
+                        .font(.title)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(regionWeatherForecast.temperature?.data ?? [], id: \.place) { (data) in
+                                let regionalWeatherDetail: RegionalWeatherDetail = RegionalWeatherDetail(topTitle: data.place ?? "", bottomTitle: "\(data.value ?? 0) \(data.unit ?? "")")
+                                RegionalWeatherDetailView(regionalWeatherDetail: regionalWeatherDetail)
+                            }
+                        }
+                    }
                 }
-                
-                
             })
         }
         .padding([.leading, .trailing], 10)

@@ -98,3 +98,10 @@ struct TemperatureData: Codable {
     var unit: String?
     var value: Int?
 }
+
+// MARK: - Display data model
+struct RegionalWeatherDetail: Codable {
+    var topTitle: String?
+    var middleTitle: String?
+    var bottomTitle: String?
+}

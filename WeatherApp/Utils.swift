@@ -42,10 +42,3 @@ enum Language: String {
     case english_us = "en"
     case traditional_chinese = "zh"
 }
-
-extension String {
-    func localized(_ language: Language) {
-        let path = Bundle.main.path(forResource: language.rawValue, ofType: "lproj")
-        
-    }
-}

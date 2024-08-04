@@ -61,6 +61,7 @@
 		214A904B28D1AD28005F0F9C /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		214A904F28D699D5005F0F9C /* LocalWeatherInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWeatherInfoView.swift; sourceTree = "<group>"; };
 		214A905128D69E19005F0F9C /* NineDayWeatherInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineDayWeatherInfoView.swift; sourceTree = "<group>"; };
+		215D650E2B6DF2A900C75666 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2167418C2A30BDDB0032BFE0 /* RegionalWeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalWeatherDetailView.swift; sourceTree = "<group>"; };
 		2170DCC428A282A30098EE95 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		219D0EDF29FC0BD70088174A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -117,6 +118,7 @@
 		2113968C28A18F960071952B /* WeatherApp */ = {
 			isa = PBXGroup;
 			children = (
+				215D650E2B6DF2A900C75666 /* Info.plist */,
 				219D0ED929FC0A780088174A /* Localization */,
 				21ABAA7A28E5D20B002A2A1C /* CustomView */,
 				214A904A28D1AD1E005F0F9C /* View */,
@@ -524,6 +526,7 @@
 				DEVELOPMENT_TEAM = ZUP7Q36325;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WeatherApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -553,6 +556,7 @@
 				DEVELOPMENT_TEAM = ZUP7Q36325;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WeatherApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

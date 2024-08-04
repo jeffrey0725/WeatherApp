@@ -8,15 +8,24 @@
 import SwiftUI
 
 struct RegionalWeatherDetailView: View {
-    @State var regionRainfallData: RegionRainfallData
+    @State var regionalWeatherDetail: RegionalWeatherDetail
+    
     var body: some View {
         VStack {
-            Text("\(regionRainfallData.place ?? "")")
-            Text("\(String(localized: "region_weather_rainfall_max")): \(regionRainfallData.max ?? 0)\(regionRainfallData.unit ?? "")")
-                .padding([.leading, .trailing], 5)
-            Text("\(String(localized: "region_weather_rainfall_min")): \(regionRainfallData.min ?? 0)\(regionRainfallData.unit ?? "")")
-                .padding([.leading, .trailing], 5)
+            if let topTitle = regionalWeatherDetail.topTitle {
+                Text(topTitle)
+                    .padding([.leading, .trailing], 5)
+            }
+            if let middleTitle = regionalWeatherDetail.middleTitle {
+                Text(middleTitle)
+                    .padding([.leading, .trailing], 5)
+            }
+            if let bottomTitle = regionalWeatherDetail.bottomTitle {
+                Text(bottomTitle)
+                    .padding([.leading, .trailing], 5)
+            }
         }
+        .frame(width: 100, height: 80)
         .background(Color.yellow)
         .cornerRadius(5)
     }
@@ -24,6 +33,6 @@ struct RegionalWeatherDetailView: View {
 
 struct RegionalWeatherDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        RegionalWeatherDetailView(regionRainfallData: RegionRainfallData())
+        RegionalWeatherDetailView(regionalWeatherDetail: RegionalWeatherDetail())
     }
 }
