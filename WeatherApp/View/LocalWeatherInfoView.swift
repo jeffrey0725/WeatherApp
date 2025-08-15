@@ -14,23 +14,33 @@ struct LocalWeatherInfoView: View {
     
     var body: some View {
         ScrollView {
+            Text(localWeatherForecast.generalSituation ?? "")
+//                .padding([.leading, .trailing], 20)
+                .padding([.bottom], 10)
             Text(localWeatherForecast.forecastDesc ?? "")
-                .onAppear(perform: {
-                    getLocalWeather()
-                })
-                .padding([.leading, .trailing], 20)
+//                .padding([.leading, .trailing], 20)
+                .padding([.bottom], 10)
             Spacer()
+            Text(localWeatherForecast.tcInfo ?? "123123")
+//                .padding([.leading, .trailing], 20)
         }
         .navigationTitle(String(localized: "local_weather_title"))
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear() {
+            NSLog("LocalWeatherInfoView enter")
+            getLocalWeather()
+        }
     }
     
     func getLocalWeather() {
         // For language code, will apply system language code, default "tc"
         // For weather type which is passed from previous page
-        weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: Utils().getApiLanguageCode(), completed: {(result) in
-            self.localWeatherForecast = result
-        })
+        // Use background thread to call api
+        DispatchQueue.global(qos: .userInitiated).async {
+            weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: Utils().getApiLanguageCode(), completed: { (result) in
+                self.localWeatherForecast = result
+            })
+        }
     }
 }
 

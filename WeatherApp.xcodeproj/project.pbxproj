@@ -95,6 +95,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		210F4F9A2E1D5A880039A1FE /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		2113968128A18F960071952B = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +131,7 @@
 				214A904A28D1AD1E005F0F9C /* View */,
 				214A904728D1A913005F0F9C /* ViewModel */,
 				2170DCC328A2828B0098EE95 /* Model */,
+				210F4F9A2E1D5A880039A1FE /* Manager */,
 				2113968D28A18F960071952B /* WeatherAppApp.swift */,
 				2113968F28A18F960071952B /* ContentView.swift */,
 				2113969128A18F990071952B /* Assets.xcassets */,
