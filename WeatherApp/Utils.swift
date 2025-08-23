@@ -9,6 +9,7 @@ import Foundation
 
 class Utils: NSObject {
     func getApiLanguageCode() -> String {
+        // Will get system language code
         switch getSystemLanguageCode() {
         case "en":
             return "en"

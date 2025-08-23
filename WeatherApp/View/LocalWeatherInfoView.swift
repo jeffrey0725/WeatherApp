@@ -10,36 +10,49 @@ import SwiftUI
 struct LocalWeatherInfoView: View {
     @State var localWeatherForecast = LocalWeatherForecast()
     @State var weatherType: String
+    
     @ObservedObject var weatherViewModel: WeatherViewModel
     
     var body: some View {
         ScrollView {
-            Text(localWeatherForecast.generalSituation ?? "")
-//                .padding([.leading, .trailing], 20)
-                .padding([.bottom], 10)
-            Text(localWeatherForecast.forecastDesc ?? "")
-//                .padding([.leading, .trailing], 20)
-                .padding([.bottom], 10)
+            VStack(alignment: .leading) {
+                Text(localWeatherForecast.generalSituation ?? "")
+                    .padding([.leading, .trailing, .bottom], 10)
+                Text(localWeatherForecast.forecastDesc ?? "")
+                    .padding([.leading, .trailing, .bottom], 10)
+                Text(localWeatherForecast.tcInfo ?? "")
+                    .padding([.leading, .trailing, .bottom], 10)
+            }
             Spacer()
-            Text(localWeatherForecast.tcInfo ?? "123123")
-//                .padding([.leading, .trailing], 20)
         }
         .navigationTitle(String(localized: "local_weather_title"))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear() {
-            NSLog("LocalWeatherInfoView enter")
-            getLocalWeather()
+            Task {
+                await getLocalWeather(.userInitiated)
+            }
+        }
+        .refreshable {
+            // If not using await, closure will complete immediately
+            await getLocalWeather(.background)
         }
     }
-    
-    func getLocalWeather() {
-        // For language code, will apply system language code, default "tc"
-        // For weather type which is passed from previous page
-        // Use background thread to call api
-        DispatchQueue.global(qos: .userInitiated).async {
-            weatherViewModel.getLocalWeatherForecast(dataType: weatherType, lang: Utils().getApiLanguageCode(), completed: { (result) in
-                self.localWeatherForecast = result
-            })
+}
+
+private extension LocalWeatherInfoView {
+    func getLocalWeather(_ runOnThread: DispatchQoS.QoSClass) async {
+        await withCheckedContinuation { (continuation) in
+            DispatchQueue.global(qos: runOnThread).async {
+                weatherViewModel.getLocalWeatherForecast(
+                    dataType: weatherType,
+                    lang: Utils().getApiLanguageCode(),
+                    completed: { (result) in
+                        DispatchQueue.main.async {
+                            self.localWeatherForecast = result
+                            continuation.resume()
+                        }
+                    })
+            }
         }
     }
 }
