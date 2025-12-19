@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject private var locationManager = LocationManager()
+    
     var body: some View {
         NavigationView {
             List {
@@ -25,6 +27,9 @@ struct HomeView: View {
             }
             .listStyle(.plain)
             .navigationTitle(String(localized: "home_view_title"))
+            .onAppear(perform: {
+                locationManager.checkLocationAuthorization()
+            })
         }
     }
 }

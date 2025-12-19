@@ -6,12 +6,17 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct RegionWeatherInfoView: View {
     @State var regionWeatherForecast = RegionWeatherForecast()
     @State var weatherType: String
     
     @ObservedObject var weatherViewModel: WeatherViewModel
+    
+    private var region: MKCoordinateRegion {
+        MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.500702, longitude: -0.124562), latitudinalMeters: 1000, longitudinalMeters: 1000)
+    }
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -45,6 +50,8 @@ struct RegionWeatherInfoView: View {
                         }
                     }
                 }
+                
+                RegionMapView() 
             })
         }
         .padding([.leading, .trailing], 10)

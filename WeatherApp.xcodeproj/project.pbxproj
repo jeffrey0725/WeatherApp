@@ -22,8 +22,12 @@
 		214A905228D69E19005F0F9C /* NineDayWeatherInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214A905128D69E19005F0F9C /* NineDayWeatherInfoView.swift */; };
 		2167418D2A30BDDB0032BFE0 /* RegionalWeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167418C2A30BDDB0032BFE0 /* RegionalWeatherDetailView.swift */; };
 		2170DCC528A282A30098EE95 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2170DCC428A282A30098EE95 /* WeatherModel.swift */; };
+		217895F82E62007E00B514A0 /* RegionMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217895F72E62007E00B514A0 /* RegionMapView.swift */; };
+		217895F92E62007E00B514A0 /* RegionMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217895F72E62007E00B514A0 /* RegionMapView.swift */; };
+		217895FA2E62007E00B514A0 /* RegionMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217895F72E62007E00B514A0 /* RegionMapView.swift */; };
 		219D0EDC29FC0BD20088174A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 219D0EDE29FC0BD20088174A /* Localizable.strings */; };
 		21ABAA7C28E5D284002A2A1C /* DailyWeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ABAA7B28E5D284002A2A1C /* DailyWeatherDetailView.swift */; };
+		21BB0D8C2E62CFCF00E88894 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BB0D8B2E62CFC600E88894 /* LocationManager.swift */; };
 		21F05EF028BE9A0800C7FED8 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F05EEF28BE9A0800C7FED8 /* SettingView.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,9 +68,11 @@
 		215D650E2B6DF2A900C75666 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2167418C2A30BDDB0032BFE0 /* RegionalWeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalWeatherDetailView.swift; sourceTree = "<group>"; };
 		2170DCC428A282A30098EE95 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
+		217895F72E62007E00B514A0 /* RegionMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionMapView.swift; sourceTree = "<group>"; };
 		219D0EDF29FC0BD70088174A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		219D0EE029FC0BE70088174A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		21ABAA7B28E5D284002A2A1C /* DailyWeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeatherDetailView.swift; sourceTree = "<group>"; };
+		21BB0D8B2E62CFC600E88894 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		21F05EEF28BE9A0800C7FED8 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,6 +104,7 @@
 		210F4F9A2E1D5A880039A1FE /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				21BB0D8B2E62CFC600E88894 /* LocationManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -182,6 +189,7 @@
 				214A904F28D699D5005F0F9C /* LocalWeatherInfoView.swift */,
 				214A905128D69E19005F0F9C /* NineDayWeatherInfoView.swift */,
 				2121D03F29FDE63700D5111B /* RegionWeatherInfoView.swift */,
+				217895F72E62007E00B514A0 /* RegionMapView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -277,7 +285,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1320;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					2113968928A18F960071952B = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -355,7 +363,9 @@
 				2170DCC528A282A30098EE95 /* WeatherModel.swift in Sources */,
 				2113968E28A18F960071952B /* WeatherAppApp.swift in Sources */,
 				214A905228D69E19005F0F9C /* NineDayWeatherInfoView.swift in Sources */,
+				217895F82E62007E00B514A0 /* RegionMapView.swift in Sources */,
 				2113B6682A2A38260061D9E8 /* Utils.swift in Sources */,
+				21BB0D8C2E62CFCF00E88894 /* LocationManager.swift in Sources */,
 				21ABAA7C28E5D284002A2A1C /* DailyWeatherDetailView.swift in Sources */,
 				214A905028D699D5005F0F9C /* LocalWeatherInfoView.swift in Sources */,
 				2121D04029FDE63700D5111B /* RegionWeatherInfoView.swift in Sources */,
@@ -367,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2113969F28A18F990071952B /* WeatherAppTests.swift in Sources */,
+				217895F92E62007E00B514A0 /* RegionMapView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +387,7 @@
 			files = (
 				211396A928A18F990071952B /* WeatherAppUITests.swift in Sources */,
 				211396AB28A18F990071952B /* WeatherAppUITestsLaunchTests.swift in Sources */,
+				217895FA2E62007E00B514A0 /* RegionMapView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +423,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -442,8 +455,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ZUP7Q36325;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -472,6 +487,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -503,8 +519,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ZUP7Q36325;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -531,7 +549,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherApp/Preview Content\"";
-				DEVELOPMENT_TEAM = ZUP7Q36325;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherApp/Info.plist;
@@ -561,7 +578,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherApp/Preview Content\"";
-				DEVELOPMENT_TEAM = ZUP7Q36325;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherApp/Info.plist;
@@ -586,11 +602,9 @@
 		211396B228A18F990071952B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZUP7Q36325;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MARKETING_VERSION = 1.0;
@@ -606,11 +620,9 @@
 		211396B328A18F990071952B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZUP7Q36325;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MARKETING_VERSION = 1.0;
@@ -626,10 +638,8 @@
 		211396B528A18F990071952B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZUP7Q36325;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jc.WeatherAppUITests;
@@ -644,10 +654,8 @@
 		211396B628A18F990071952B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZUP7Q36325;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jc.WeatherAppUITests;

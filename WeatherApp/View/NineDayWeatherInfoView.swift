@@ -13,7 +13,7 @@ struct NineDayWeatherInfoView: View {
     @ObservedObject var weatherViewModel: WeatherViewModel
     
     var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(alignment: .leading) {
                 Text(String(localized: "nine_weather_title"))
                     .font(.title)
@@ -50,6 +50,10 @@ struct NineDayWeatherInfoView: View {
             self.nineDayWeatherForecast = result
         })
     }
+}
+
+extension NineDayWeatherInfoView {
+    
 }
 
 struct NineDayWeatherInfoView_Previews: PreviewProvider {
