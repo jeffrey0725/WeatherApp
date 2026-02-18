@@ -12,6 +12,14 @@ import CoreLocation
 final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     var manager = CLLocationManager()
     
+    init(manager: CLLocationManager = CLLocationManager()) {
+        self.manager = manager
+        super.init()
+        
+        // assign delegate
+        self.manager.delegate = self
+    }
+    
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkLocationAuthorization()
     }
@@ -19,7 +27,6 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
 
 extension LocationManager {
     func checkLocationAuthorization() {
-        manager.delegate = self
         manager.startUpdatingLocation()
         
         switch manager.authorizationStatus {
