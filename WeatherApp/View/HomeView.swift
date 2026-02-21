@@ -27,9 +27,6 @@ struct HomeView: View {
             }
             .listStyle(.plain)
             .navigationTitle(String(localized: "home_view_title"))
-            .onAppear(perform: {
-                locationManager.checkLocationAuthorization()
-            })
         }
     }
 }
