@@ -16,3 +16,4 @@
 "region_weather_rainfall_min" = "最少";
 "last_updated" = "最後更新";
 "region_weather_temperature_title" = "地區氣溫資訊";
+"region_weather_temperature_place" = "地區";

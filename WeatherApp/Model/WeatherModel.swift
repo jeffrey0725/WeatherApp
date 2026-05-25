@@ -93,10 +93,21 @@ struct TemperatureInfo: Codable {
     var recordTime: String?
 }
 
-struct TemperatureData: Codable {
+struct TemperatureData: Codable, Identifiable {
+    var id = UUID()
     var place: String?
     var unit: String?
     var value: Int?
+    var latitude: Double?
+    var longitude: Double?
+    
+    enum CodingKeys: String, CodingKey {
+        case place
+        case unit
+        case value
+        case latitude
+        case longitude
+    }
 }
 
 // MARK: - Display data model

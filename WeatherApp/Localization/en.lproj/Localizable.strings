@@ -16,3 +16,4 @@
 "region_weather_rainfall_min" = "Min";
 "last_updated" = "Last updated";
 "region_weather_temperature_title" = "Region Temperature Info";
+"region_weather_temperature_place" = "Place";

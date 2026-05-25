@@ -51,7 +51,7 @@ struct RegionWeatherInfoView: View {
                     }
                 }
                 
-                RegionMapView() 
+                RegionMapView(stations: self.regionWeatherForecast.temperature?.data ?? []) 
             })
         }
         .padding([.leading, .trailing], 10)

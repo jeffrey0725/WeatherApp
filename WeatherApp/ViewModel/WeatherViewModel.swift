@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import CoreLocation
 
 class WeatherViewModel: ObservableObject {
     @Published var baseUrl: String = "https://data.weather.gov.hk/weatherAPI/opendata/weather.php"
@@ -70,7 +71,27 @@ class WeatherViewModel: ObservableObject {
             
             let result = try! JSONDecoder().decode(RegionWeatherForecast.self, from: data)
             DispatchQueue.main.async {
-                completed(result)
+                // Add latitude, longtitude into response
+                var _result = result
+                let stationCoordinateMap: [String: CLLocationCoordinate2D] = Dictionary(uniqueKeysWithValues: StationCoordinateStore.stationCoordinates.flatMap({ (station) in
+                    [
+                        (station.placeTC, station.coordinate),
+                        (station.placeEN, station.coordinate)
+                    ]
+                }))
+                
+                if var data = _result.temperature?.data {
+                    for index in data.indices {
+                        let place = data[index].place ?? ""
+                        
+                        if let coordinate = stationCoordinateMap[place] {
+                            data[index].latitude = coordinate.latitude
+                            data[index].longitude = coordinate.longitude
+                        }
+                    }
+                    _result.temperature?.data = data
+                }
+                completed(_result)
             }
         }).resume()
     }
