@@ -7,6 +7,12 @@
 
 import Foundation
 
+// MARK: - BannerItem type
+struct BannerItem: Identifiable {
+    let id = UUID()
+    let text: String
+}
+
 // MARK: - Data type
 struct DataType {
     var localWeatherForecast: String = "flw"
@@ -39,6 +45,10 @@ struct RegionWeatherForecast: Codable {
     var updateTime: String?
     var lightning: LightningInfo?
     var temperature: TemperatureInfo?
+    var specialWxTips: [String]?
+    var warningMessage: [String]?
+    var tcmessage: [String]?
+    var speicalWxTips: [String]?
 }
 
 struct WeatherForecast: Codable {

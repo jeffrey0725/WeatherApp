@@ -21,7 +21,22 @@ struct RegionWeatherInfoView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, content: {
+                // Last fetch data
                 Text("\(String(localized: "last_updated")): \(Utils().getCurrentDate(dateFormat: "yyyy-MM-dd HH:mm:ss"))")
+                
+                if let _speicalWxTips = regionWeatherForecast.specialWxTips {
+                    RollingBannerView(content: _speicalWxTips)
+                }
+                
+                if let _tcmessage = regionWeatherForecast.tcmessage {
+                    RollingBannerView(content: _tcmessage)
+                        .padding([.top], 10)
+                }
+                
+                if let _warningMessage = regionWeatherForecast.warningMessage {
+                    RollingBannerView(content: _warningMessage)
+                        .padding([.top], 10)
+                }
                 
                 if regionWeatherForecast.rainfall?.data?.count ?? 0 > 0 {
                     Text(String(localized: "region_weather_rainfall_title"))
@@ -87,3 +102,4 @@ struct RegionWeatherInfoView_Previews: PreviewProvider {
         RegionWeatherInfoView(weatherType: DataType().currentWeatherReport, weatherViewModel: WeatherViewModel())
     }
 }
+
