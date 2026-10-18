@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BannerDetailView: View {
+    @EnvironmentObject private var settings: AppSettings
     let text: String
     @Environment(\.dismiss) var dismiss
     
@@ -17,7 +18,7 @@ struct BannerDetailView: View {
                 HStack {
                     Image(systemName: "info.circle.fill")
                         .foregroundColor(.orange)
-                    Text("Details")
+                    Text(settings.text("weather_read_details"))
                         .font(.headline)
                 }
                 .padding(.top)
@@ -34,11 +35,11 @@ struct BannerDetailView: View {
                 Spacer()
             }
             .padding(24)
-            .navigationTitle("Info")
+            .navigationTitle(settings.text("weather_information"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Close") {
+                    Button(settings.text("weather_close")) {
                         dismiss()
                     }
                 }
@@ -51,4 +52,5 @@ struct BannerDetailView: View {
 
 #Preview {
     BannerDetailView(text: "")
+        .environmentObject(AppSettings.preview)
 }

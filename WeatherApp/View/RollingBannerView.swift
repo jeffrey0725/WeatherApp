@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct RollingBannerView: View {
     let content: [String]
@@ -76,4 +77,5 @@ struct RollingBannerView: View {
 
 #Preview {
     RollingBannerView(content: [])
+        .environmentObject(AppSettings.preview)
 }

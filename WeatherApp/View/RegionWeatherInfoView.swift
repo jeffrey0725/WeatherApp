@@ -1,105 +1,119 @@
-//
-//  RegionWeatherInfoView.swift
-//  WeatherApp
-//
-//  Created by Jeffrey Cheung on 30/4/2023.
-//
-
 import SwiftUI
-import MapKit
+import SwiftData
 
 struct RegionWeatherInfoView: View {
-    @State var regionWeatherForecast = RegionWeatherForecast()
-    @State var weatherType: String
-    
-    @ObservedObject var weatherViewModel: WeatherViewModel
-    
-    private var region: MKCoordinateRegion {
-        MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.500702, longitude: -0.124562), latitudinalMeters: 1000, longitudinalMeters: 1000)
-    }
-    
+    @EnvironmentObject private var settings: AppSettings
+    @StateObject private var weatherViewModel = WeatherViewModel()
+
+    private var report: RegionWeatherForecast { weatherViewModel.regionWeatherForecast }
+
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, content: {
-                // Last fetch data
-                Text("\(String(localized: "last_updated")): \(Utils().getCurrentDate(dateFormat: "yyyy-MM-dd HH:mm:ss"))")
-                
-                if let _speicalWxTips = regionWeatherForecast.specialWxTips {
-                    RollingBannerView(content: _speicalWxTips)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                WeatherStatusView(viewModel: weatherViewModel) {
+                    Task { await refresh() }
                 }
-                
-                if let _tcmessage = regionWeatherForecast.tcmessage {
-                    RollingBannerView(content: _tcmessage)
-                        .padding([.top], 10)
+                WeatherUpdateView(timestamp: report.updateTime)
+
+                if let icons = report.icon, !icons.isEmpty {
+                    HStack {
+                        Text(settings.text("weather_conditions")).font(.headline)
+                        Spacer()
+                        ForEach(Array(icons.enumerated()), id: \.offset) { _, icon in
+                            WeatherIconView(icon: icon)
+                        }
+                    }
                 }
-                
-                if let _warningMessage = regionWeatherForecast.warningMessage {
-                    RollingBannerView(content: _warningMessage)
-                        .padding([.top], 10)
+                banners(report.specialWxTips ?? report.speicalWxTips)
+                banners(report.tcmessage)
+                banners(report.warningMessage)
+
+                if let humidity = report.humidity, let readings = humidity.data, !readings.isEmpty {
+                    Text(settings.text("weather_humidity")).font(.headline)
+                    WeatherUpdateView(timestamp: humidity.recordTime)
+                    ForEach(Array(readings.enumerated()), id: \.offset) { _, reading in
+                        Text("\(reading.place ?? ""): \(settings.measurement(reading.value, unit: reading.unit))")
+                    }
                 }
-                
-                if regionWeatherForecast.rainfall?.data?.count ?? 0 > 0 {
-                    Text(String(localized: "region_weather_rainfall_title"))
-                        .padding([.top], 10)
-                        .font(.title)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(regionWeatherForecast.rainfall?.data ?? [], id: \.place) { (data) in
-                                let regionalWeatherDetail: RegionalWeatherDetail = RegionalWeatherDetail(topTitle: data.place ?? "", middleTitle: String(data.max ?? 0), bottomTitle: String(data.min ?? 0))
-                                RegionalWeatherDetailView(regionalWeatherDetail: regionalWeatherDetail)
+
+                Text(settings.text("weather_uv_index")).font(.headline)
+                if let uv = report.uvindex, let readings = uv.data, !readings.isEmpty {
+                    if let record = uv.recordDesc, !record.isEmpty {
+                        Text(record).font(.caption).foregroundStyle(.secondary)
+                    }
+                    ForEach(Array(readings.enumerated()), id: \.offset) { _, reading in
+                        Text("\(reading.place ?? ""): \(reading.value.map { $0.formatted(.number.precision(.fractionLength(0...1)).locale(settings.locale)) } ?? settings.text("weather_unavailable")) \(reading.desc ?? "")")
+                    }
+                    if let message = uv.message, !message.isEmpty { Text(message) }
+                } else {
+                    Text(report.uvindex?.message ?? settings.text("weather_unavailable"))
+                        .foregroundStyle(.secondary)
+                }
+
+                if let rainfall = report.rainfall, let readings = rainfall.data, !readings.isEmpty {
+                    Text(settings.text("region_weather_rainfall_title")).font(.headline)
+                    if let start = settings.timestamp(rainfall.startTime),
+                       let end = settings.timestamp(rainfall.endTime) {
+                        Text("\(start) – \(end)").font(.caption).foregroundStyle(.secondary)
+                    }
+                    ScrollView(.horizontal) {
+                        HStack(alignment: .top, spacing: 12) {
+                            ForEach(Array(readings.enumerated()), id: \.offset) { _, reading in
+                                VStack(alignment: .leading, spacing: 6) {
+                                    Text(reading.place ?? "").font(.headline)
+                                    if reading.main?.uppercased() == "TRUE" {
+                                        Text(settings.text("weather_unavailable"))
+                                    } else {
+                                        Text("\(settings.text("region_weather_rainfall_max")): \(settings.measurement(reading.max, unit: reading.unit))")
+                                        if let min = reading.min {
+                                            Text("\(settings.text("region_weather_rainfall_min")): \(settings.measurement(min, unit: reading.unit))")
+                                        }
+                                    }
+                                }
+                                .padding()
+                                .frame(width: 180, alignment: .leading)
+                                .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
                             }
                         }
                     }
                 }
-                
-                if regionWeatherForecast.rainfall?.data?.count ?? 0 > 0 {
-                    Text(String(localized: "region_weather_temperature_title"))
-                        .padding([.top], 10)
-                        .font(.title)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(regionWeatherForecast.temperature?.data ?? [], id: \.place) { (data) in
-                                let regionalWeatherDetail: RegionalWeatherDetail = RegionalWeatherDetail(topTitle: data.place ?? "", bottomTitle: "\(data.value ?? 0) \(data.unit ?? "")")
-                                RegionalWeatherDetailView(regionalWeatherDetail: regionalWeatherDetail)
+
+                if let temperature = report.temperature, let stations = temperature.data, !stations.isEmpty {
+                    Text(settings.text("region_weather_temperature_title")).font(.headline)
+                    WeatherUpdateView(timestamp: temperature.recordTime)
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 12) {
+                            ForEach(stations) { station in
+                                RegionalWeatherDetailView(regionalWeatherDetail: RegionalWeatherDetail(
+                                    topTitle: station.place,
+                                    bottomTitle: settings.measurement(station.value, unit: station.unit)))
                             }
                         }
                     }
+                    RegionMapView(stations: stations, observationTime: temperature.recordTime)
                 }
-                
-                RegionMapView(stations: self.regionWeatherForecast.temperature?.data ?? []) 
-            })
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
         }
-        .padding([.leading, .trailing], 10)
-        .onAppear(perform: {
-            getRegionWeatherForecast()
-        })
-        .navigationTitle(String(localized: "region_weather_title"))
+        .navigationTitle(settings.text("region_weather_title"))
         .navigationBarTitleDisplayMode(.inline)
-        .refreshable {
-            getRegionWeatherForecast()
-        }
+        .task(id: settings.apiLanguageCode) { await refresh() }
+        .refreshable { await refresh() }
     }
-    
-    func getRegionWeatherForecast() {
-        var urlComponents = URLComponents(string: weatherViewModel.baseUrl)
-        urlComponents?.queryItems = [
-            URLQueryItem(name: "dataType", value: DataType().currentWeatherReport),
-            URLQueryItem(name: "lang", value: Utils().getApiLanguageCode())
-        ]
-        
-        guard let urlComponents = urlComponents else {
-            return
-        }
-        
-        weatherViewModel.getRegionWeatherForecast(urlComponents: urlComponents, completed: {(result) in
-            self.regionWeatherForecast = result
-        })
+
+    @ViewBuilder
+    private func banners(_ messages: [String]?) -> some View {
+        if let messages, !messages.isEmpty { RollingBannerView(content: messages) }
+    }
+
+    private func refresh() async {
+        await weatherViewModel.loadCurrentReport(lang: settings.apiLanguageCode)
     }
 }
 
-struct RegionWeatherInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        RegionWeatherInfoView(weatherType: DataType().currentWeatherReport, weatherViewModel: WeatherViewModel())
-    }
+#Preview {
+    RegionWeatherInfoView()
+        .modelContainer(for: FavoriteStation.self, inMemory: true)
+        .environmentObject(AppSettings.preview)
 }
-

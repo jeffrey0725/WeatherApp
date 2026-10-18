@@ -1,63 +1,69 @@
-//
-//  NineDayWeatherInfoView.swift
-//  WeatherApp
-//
-//  Created by Jeffrey Cheung on 18/9/2022.
-//
-
 import SwiftUI
 
 struct NineDayWeatherInfoView: View {
-    @State var nineDayWeatherForecast = NineDayWeatherForecast()
-    @State var weatherType: String
-    @ObservedObject var weatherViewModel: WeatherViewModel
-    
+    @EnvironmentObject private var settings: AppSettings
+    @StateObject private var weatherViewModel = WeatherViewModel()
+
+    private var forecast: NineDayWeatherForecast { weatherViewModel.nineDayWeatherForecast }
+    private var section: WeatherDashboardSection<NineDayWeatherForecast> {
+        WeatherDashboardSection(value: weatherViewModel.lastChecked == nil ? nil : forecast,
+                                isLoading: weatherViewModel.isLoading,
+                                errorMessage: weatherViewModel.errorMessage,
+                                lastChecked: weatherViewModel.lastChecked)
+    }
+
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading) {
-                Text(String(localized: "nine_weather_title"))
-                    .font(.title)
-                ForEach(nineDayWeatherForecast.weatherForecast ?? [], id: \.forecastDate) {(data) in
-                    DailyWeatherDetailView(weatherForecast: data)
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 16) {
+                WeatherDashboardSectionView(title: "forecast_temperature_trend", section: section,
+                                            isRefreshing: weatherViewModel.isLoading, retry: retry) { report in
+                    WeatherUpdateView(timestamp: report.updateTime)
+                    if (report.weatherForecast ?? []).isEmpty {
+                        Text(settings.text("forecast_empty")).foregroundStyle(.secondary)
+                    } else {
+                        NineDayForecastChartView(forecast: report)
+                        Divider()
+                        Text(settings.text("forecast_all_days")).font(.headline)
+                        ForEach(Array((report.weatherForecast ?? []).enumerated()), id: \.offset) { _, day in
+                            DailyWeatherDetailView(weatherForecast: day)
+                        }
+                    }
+                    if let situation = report.generalSituation, !situation.isEmpty {
+                        Text(settings.text("general_situtation")).font(.headline)
+                        Text(situation)
+                    }
                 }
-                Spacer()
-                Text(String(localized: "general_situtation"))
-                    .font(.title)
-                Text("\(nineDayWeatherForecast.generalSituation ?? "")")
-                    .font(.subheadline)
+            }
+            .padding()
+            .frame(maxWidth: 900, alignment: .leading)
+            .frame(maxWidth: .infinity)
+        }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle(settings.text("nine_weather_title"))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: retry) {
+                    if weatherViewModel.isLoading { ProgressView() }
+                    else { Image(systemName: "arrow.clockwise") }
+                }
+                .disabled(weatherViewModel.isLoading)
+                .accessibilityLabel(settings.text("weather_refresh"))
             }
         }
-        .padding([.leading, .trailing], 10)
-        .onAppear(perform: {
-            getNineDayWeatherForecast()
-        })
-        .navigationTitle(String(localized: "nine_weather_title"))
-        .navigationBarTitleDisplayMode(.inline)
+        .task(id: settings.apiLanguageCode) { await refresh() }
+        .refreshable { await refresh() }
+        .refreshWeatherOnActivation { await refresh() }
     }
-    
-    func getNineDayWeatherForecast() {
-        var urlComponents = URLComponents(string: weatherViewModel.baseUrl)
-        urlComponents?.queryItems = [
-            URLQueryItem(name: "dataType", value: DataType().nineDayWeatherForecast),
-            URLQueryItem(name: "lang", value: Utils().getApiLanguageCode())
-        ]
-        
-        guard let urlComponents = urlComponents else {
-            return
-        }
-        
-        weatherViewModel.getNineDayWeatherForecast(urlComponents: urlComponents, completed: {(result) in
-            self.nineDayWeatherForecast = result
-        })
+
+    private func retry() { Task { await refresh() } }
+
+    private func refresh() async {
+        await weatherViewModel.loadNineDayForecast(lang: settings.apiLanguageCode)
     }
 }
 
-extension NineDayWeatherInfoView {
-    
-}
-
-struct NineDayWeatherInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        NineDayWeatherInfoView(weatherType: DataType().nineDayWeatherForecast, weatherViewModel: WeatherViewModel())
-    }
+#Preview {
+    NineDayWeatherInfoView()
+        .environmentObject(AppSettings.preview)
 }

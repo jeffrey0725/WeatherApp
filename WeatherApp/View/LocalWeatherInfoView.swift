@@ -1,64 +1,52 @@
-//
-//  LocalWeatherInfoView.swift
-//  WeatherApp
-//
-//  Created by Jeffrey Cheung on 18/9/2022.
-//
-
 import SwiftUI
 
 struct LocalWeatherInfoView: View {
-    @State var localWeatherForecast = LocalWeatherForecast()
-    @State var weatherType: String
-    
-    @ObservedObject var weatherViewModel: WeatherViewModel
-    
+    @EnvironmentObject private var settings: AppSettings
+    @StateObject private var weatherViewModel = WeatherViewModel()
+
+    private var forecast: LocalWeatherForecast { weatherViewModel.localWeatherForecast }
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                Text(localWeatherForecast.generalSituation ?? "")
-                    .padding([.leading, .trailing, .bottom], 10)
-                Text(localWeatherForecast.forecastDesc ?? "")
-                    .padding([.leading, .trailing, .bottom], 10)
-                Text(localWeatherForecast.tcInfo ?? "")
-                    .padding([.leading, .trailing, .bottom], 10)
+            VStack(alignment: .leading, spacing: 16) {
+                WeatherStatusView(viewModel: weatherViewModel) {
+                    Task { await refresh() }
+                }
+                WeatherUpdateView(timestamp: forecast.updateTime)
+                if let period = forecast.forecastPeriod, !period.isEmpty {
+                    Text(period).font(.headline)
+                }
+                section("general_situtation", text: forecast.generalSituation)
+                section("weather_forecast", text: forecast.forecastDesc)
+                section("weather_cyclone_info", text: forecast.tcInfo)
+                section("weather_fire_warning", text: forecast.fireDangerWarning)
+                section("weather_outlook", text: forecast.outlook)
             }
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
         }
-        .navigationTitle(String(localized: "local_weather_title"))
+        .navigationTitle(settings.text("local_weather_title"))
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear() {
-            Task {
-                await getLocalWeather(.userInitiated)
-            }
-        }
-        .refreshable {
-            // If not using await, closure will complete immediately
-            await getLocalWeather(.background)
-        }
+        .task(id: settings.apiLanguageCode) { await refresh() }
+        .refreshable { await refresh() }
     }
-}
 
-private extension LocalWeatherInfoView {
-    func getLocalWeather(_ runOnThread: DispatchQoS.QoSClass) async {
-        await withCheckedContinuation { (continuation) in
-            DispatchQueue.global(qos: runOnThread).async {
-                weatherViewModel.getLocalWeatherForecast(
-                    dataType: weatherType,
-                    lang: Utils().getApiLanguageCode(),
-                    completed: { (result) in
-                        DispatchQueue.main.async {
-                            self.localWeatherForecast = result
-                            continuation.resume()
-                        }
-                    })
+    @ViewBuilder
+    private func section(_ title: String, text: String?) -> some View {
+        if let text, !text.isEmpty {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(settings.text(title)).font(.headline)
+                Text(text)
             }
         }
     }
+
+    private func refresh() async {
+        await weatherViewModel.loadLocalForecast(lang: settings.apiLanguageCode)
+    }
 }
 
-struct LocalWeatherInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        LocalWeatherInfoView(weatherType: DataType().localWeatherForecast, weatherViewModel: WeatherViewModel())
-    }
+#Preview {
+    LocalWeatherInfoView()
+        .environmentObject(AppSettings.preview)
 }

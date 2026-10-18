@@ -3,13 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We wan&apos;t access your location to provide better experience.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We wan&apos;t access your location to provide better experience.</string>
-	<key>NSLocationUsageDescription</key>
-	<string>We wan&apos;t access your location to provide better experience.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We wan&apos;t access your location to provide better experience.</string>
+	<string>Find the nearest Hong Kong weather station with an available temperature reading when you tap Near me.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

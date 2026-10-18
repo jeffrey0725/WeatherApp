@@ -1,98 +1,89 @@
-//
-//  WeatherViewModel.swift
-//  WeatherApp
-//
-//  Created by Jeffrey Cheung on 14/9/2022.
-//
-
 import Foundation
 import Combine
 import CoreLocation
 
-class WeatherViewModel: ObservableObject {
-    @Published var baseUrl: String = "https://data.weather.gov.hk/weatherAPI/opendata/weather.php"
-    @Published var localWeatherForcast = LocalWeatherForecast()
-    
-    func getUrlWithQuery(dataType: String, lang: String) -> URLComponents {
-        var urlComponents = URLComponents(string: baseUrl)
-        urlComponents?.queryItems = [
-            URLQueryItem(name: "dataType", value: dataType),
-            URLQueryItem(name: "lang", value: lang)
-        ]
-        return urlComponents!
+@MainActor
+final class WeatherViewModel: ObservableObject {
+    @Published private(set) var localWeatherForecast = LocalWeatherForecast()
+    @Published private(set) var nineDayWeatherForecast = NineDayWeatherForecast()
+    @Published private(set) var regionWeatherForecast = RegionWeatherForecast()
+    @Published private(set) var warningReport = WeatherWarningReport()
+    @Published private(set) var isLoading = false
+    @Published private(set) var errorMessage: String?
+    @Published private(set) var lastChecked: Date?
+
+    private let service: WeatherService
+    private let requests = WeatherRequestCoordinator()
+    private var contentLanguage: String?
+
+    init(service: WeatherService = WeatherService()) {
+        self.service = service
     }
-    
-    func getLocalWeatherForecast(dataType: String, lang: String, completed: @escaping (LocalWeatherForecast) -> ()) {
-        var urlComponents = URLComponents(string: baseUrl)
-        urlComponents?.queryItems = [
-            URLQueryItem(name: "dataType", value: dataType),
-            URLQueryItem(name: "lang", value: lang)
-        ]
-        
-        URLSession.shared.dataTask(with: (urlComponents?.url)!, completionHandler: {(data, response, error) in
-            guard let data = data else {
-                return
-            }
-            
-            let result = try! JSONDecoder().decode(LocalWeatherForecast.self, from: data)
-            DispatchQueue.main.async {
-                completed(result)
-            }
-        }).resume()
-    }
-    
-    func getNineDayWeatherForecast(urlComponents: URLComponents, completed: @escaping (NineDayWeatherForecast) -> ()) {
-        URLSession.shared.dataTask(with: (urlComponents.url)!, completionHandler: {(data, response, error) in
-            guard let data = data else {
-                return
-            }
-            
-            let result = try! JSONDecoder().decode(NineDayWeatherForecast.self, from: data)
-            
-            DispatchQueue.main.async {
-                completed(result)
-            }
-        }).resume()
-    }
-    
-    func getRegionWeatherForecast(urlComponents: URLComponents, completed: @escaping (RegionWeatherForecast) -> ()) {
-        guard let url = urlComponents.url else {
-            return
+
+    func loadLocalForecast(lang: String) async {
+        await load(lang: lang, fetch: { try await self.service.localForecast(lang: lang) }) {
+            self.localWeatherForecast = $0
         }
-        
-        URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-                return
-            }
-            
-            guard let data = data else {
-                return
-            }
-            
-            let result = try! JSONDecoder().decode(RegionWeatherForecast.self, from: data)
-            DispatchQueue.main.async {
-                // Add latitude, longtitude into response
-                var _result = result
-                let stationCoordinateMap: [String: CLLocationCoordinate2D] = Dictionary(uniqueKeysWithValues: StationCoordinateStore.stationCoordinates.flatMap({ (station) in
-                    [
-                        (station.placeTC, station.coordinate),
-                        (station.placeEN, station.coordinate)
-                    ]
-                }))
-                
-                if var data = _result.temperature?.data {
-                    for index in data.indices {
-                        let place = data[index].place ?? ""
-                        
-                        if let coordinate = stationCoordinateMap[place] {
-                            data[index].latitude = coordinate.latitude
-                            data[index].longitude = coordinate.longitude
-                        }
+    }
+
+    func loadNineDayForecast(lang: String) async {
+        await load(lang: lang, fetch: { try await self.service.nineDayForecast(lang: lang) }) {
+            self.nineDayWeatherForecast = $0
+        }
+    }
+
+    func loadCurrentReport(lang: String) async {
+        await load(lang: lang, fetch: {
+            var report = try await self.service.currentReport(lang: lang)
+            let coordinates = Dictionary(uniqueKeysWithValues:
+                StationCoordinateStore.stationCoordinates.flatMap { station in
+                    [(station.placeTC, station.coordinate), (station.placeEN, station.coordinate)]
+                })
+            if var stations = report.temperature?.data {
+                for index in stations.indices {
+                    if let coordinate = coordinates[stations[index].place ?? ""] {
+                        stations[index].latitude = coordinate.latitude
+                        stations[index].longitude = coordinate.longitude
                     }
-                    _result.temperature?.data = data
                 }
-                completed(_result)
+                report.temperature?.data = stations
             }
-        }).resume()
+            return report
+        }) {
+            self.regionWeatherForecast = $0
+        }
+    }
+
+    func loadWarnings(lang: String) async {
+        await load(lang: lang, fetch: { try await self.service.warningReport(lang: lang) }) {
+            self.warningReport = $0
+        }
+    }
+
+    private func load<Value>(lang: String, fetch: @escaping @MainActor () async throws -> Value,
+                             apply: @escaping @MainActor (Value) -> Void) async {
+        await requests.perform(language: lang) {
+            if self.contentLanguage != lang {
+                self.localWeatherForecast = LocalWeatherForecast()
+                self.nineDayWeatherForecast = NineDayWeatherForecast()
+                self.regionWeatherForecast = RegionWeatherForecast()
+                self.warningReport = WeatherWarningReport()
+                self.lastChecked = nil
+                self.contentLanguage = lang
+            }
+            self.isLoading = true
+            self.errorMessage = nil
+            defer { self.isLoading = false }
+            do {
+                let value = try await fetch()
+                try Task.checkCancellation()
+                apply(value)
+                self.lastChecked = Date()
+            } catch is CancellationError {
+            } catch let error as URLError where error.code == .cancelled {
+            } catch {
+                self.errorMessage = WeatherServiceError.message(for: error, lang: lang)
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RegionalWeatherDetailView: View {
-    @State var regionalWeatherDetail: RegionalWeatherDetail
+    let regionalWeatherDetail: RegionalWeatherDetail
     
     var body: some View {
         VStack {
@@ -28,8 +28,9 @@ struct RegionalWeatherDetailView: View {
                     .padding([.leading, .trailing], 5)
             }
         }
-        .frame(width: 100, height: 80)
-        .background(Color.yellow)
+        .padding(10)
+        .frame(width: 130, alignment: .top)
+        .background(Color(.secondarySystemBackground))
         .cornerRadius(5)
     }
 }
