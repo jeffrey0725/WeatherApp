@@ -76,7 +76,7 @@ PYTHON
 sources=()
 while IFS= read -r source; do
     sources+=("$source")
-done < <(rg --files WeatherApp -g '*.swift')
+done < <(find WeatherApp -name '*.swift' | sort)
 "$compiler" -typecheck -swift-version 5 \
     -sdk "$ios_sdk" -target arm64-apple-ios17.6 \
     -module-cache-path "$build_dir/ios-module-cache" "${sources[@]}"

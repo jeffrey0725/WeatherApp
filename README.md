@@ -1,6 +1,6 @@
 # WeatherApp
 
-Last updated: 2026-10-18 22:17:14 HKT (UTC+08:00)
+Last updated: 2026-10-19 09:32:03 HKT (UTC+08:00)
 
 A native iOS app for Hong Kong weather, built with SwiftUI and Hong Kong Observatory (HKO) open data. The current deployment target is iOS 17.6 and the project uses Swift 5 language mode.
 
@@ -24,6 +24,7 @@ A native iOS app for Hong Kong weather, built with SwiftUI and Hong Kong Observa
 - Favorite stations with custom labels, ordering, deletion, and local SwiftData persistence.
 - Follow-device, English, and Traditional Chinese language settings.
 - Celsius/Fahrenheit preferences for numeric temperature readings and ranges.
+- Appearance preference in Settings: follow the device's light/dark setting, or force Light or Dark.
 - Pull-to-refresh, loading states, retry actions, and localized network errors.
 - Previous warning reports are labeled explicitly when a refresh fails; an unavailable current status is not presented as an all-clear result.
 
@@ -64,7 +65,7 @@ For additional configuration options, see the [XcodeGen project specification](h
 
 ## Validate without launching a simulator
 
-The existing validator requires macOS 14 or later, a selected Xcode installation, Python 3, and `rg`. Run it from the project root:
+The existing validator requires macOS 14 or later, a selected Xcode installation, and Python 3. Run it from the project root:
 
 ```sh
 bash scripts/validate-hko.sh
@@ -74,7 +75,19 @@ The script runs the service, model, favorites, and settings tests in a standalon
 
 Some execution sandboxes require approval for Xcode's SwiftData compiler plugin. The script does not launch Xcode or a simulator. A complete Xcode build and device UI checks are separate validation steps.
 
-The latest validation on **2026-10-18, Hong Kong time**, reported **180 passing tests and passing iOS source typechecks**, including 11 new rainfall-map regressions. All 36 rainfall coordinates and API ID/name matches were checked against the official spatial dataset and live English feed. XcodeGen was rerun and the generated targets include all 47 app, 10 unit-test, and 2 UI-test Swift sources, with localized resources in both app and unit-test targets. A normal iOS Xcode test run and device UI verification remain pending. See [validation details and limitations](docs/STATUS.md#validation-record).
+The latest validation on **2026-10-19, Hong Kong time**, reported **182 passing tests and passing iOS source typechecks** (180 on 2026-10-18, plus 2 appearance-setting tests), and the simulator UI tests passed. The earlier rainfall work added 11 rainfall-map regressions. All 36 rainfall coordinates and API ID/name matches were checked against the official spatial dataset and live English feed. XcodeGen was rerun and the generated targets include all 47 app, 10 unit-test, and 2 UI-test Swift sources, with localized resources in both app and unit-test targets. A normal iOS Xcode test run and device UI verification remain pending. See [validation details and limitations](docs/STATUS.md#validation-record).
+
+## Run the simulator UI tests
+
+The UI tests need an installed iOS simulator and network access, because they use live HKO data and assert only on structure. They use an in-memory favorites store and forced language/unit/appearance launch arguments, so they leave your saved data alone. Replace the UDID with one from `xcrun simctl list devices available`:
+
+```bash
+xcodebuild test -project WeatherApp.xcodeproj -scheme WeatherApp \
+  -destination 'id=<simulator UDID>' -derivedDataPath .build/validation/dd \
+  -only-testing:WeatherAppUITests CODE_SIGNING_ALLOWED=NO
+```
+
+They last passed on 2026-10-18 (iPhone 16 simulator, iOS 18.1). See [STATUS.md](docs/STATUS.md#open-issues) for what they do and do not cover.
 
 ## Data and persistence
 

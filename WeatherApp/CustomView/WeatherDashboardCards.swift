@@ -11,7 +11,7 @@ struct WeatherDashboardSectionView<Value, Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text(settings.text(title)).font(.headline)
-            if section.isLoading {
+            if section.isLoading && section.value == nil {
                 ProgressView(settings.text("weather_loading")).font(.subheadline)
             }
             if let error = section.errorMessage {
@@ -22,7 +22,7 @@ struct WeatherDashboardSectionView<Value, Content: View>: View {
                 }
             }
             if let value = section.value {
-                if section.isLoading || section.errorMessage != nil {
+                if section.errorMessage != nil {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(settings.text("weather_previous_data"))
                         if let checked = section.lastChecked {

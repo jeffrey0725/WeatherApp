@@ -37,6 +37,20 @@ struct SettingView: View {
             } footer: {
                 Text(settings.text("settings_temperature_help"))
             }
+
+            Section {
+                Picker(settings.text("settings_appearance"), selection: $settings.appearance) {
+                    ForEach(AppAppearance.allCases) { appearance in
+                        Text(settings.text(appearance.titleKey)).tag(appearance)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .accessibilityLabel(settings.text("settings_appearance"))
+            } header: {
+                Text(settings.text("settings_appearance"))
+            } footer: {
+                Text(settings.text("settings_appearance_help"))
+            }
         }
         .navigationTitle(settings.text("settings_title"))
         .navigationBarTitleDisplayMode(.inline)

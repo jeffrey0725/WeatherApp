@@ -4,10 +4,5 @@
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Find the nearest Hong Kong weather station with an available temperature reading when you tap Near me.</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 </dict>
 </plist>

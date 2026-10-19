@@ -38,6 +38,18 @@ enum TemperatureUnit: String, CaseIterable, Identifiable {
     var symbol: String { self == .celsius ? "°C" : "°F" }
 }
 
+enum AppAppearance: String, CaseIterable, Identifiable {
+    case system, light, dark
+    var id: String { rawValue }
+    var titleKey: String {
+        switch self {
+        case .system: return "settings_appearance_system"
+        case .light: return "settings_appearance_light"
+        case .dark: return "settings_appearance_dark"
+        }
+    }
+}
+
 protocol SettingsStorage {
     func read(_ key: String) -> String?
     func write(_ value: String, forKey key: String)
@@ -66,12 +78,17 @@ enum AppLocalization {
 final class AppSettings: ObservableObject {
     static let languageKey = "weather.settings.language"
     static let temperatureUnitKey = "weather.settings.temperatureUnit"
+    static let appearanceKey = "weather.settings.appearance"
 
     @Published var language: AppLanguage {
         didSet { storage.write(language.rawValue, forKey: Self.languageKey) }
     }
     @Published var temperatureUnit: TemperatureUnit {
         didSet { storage.write(temperatureUnit.rawValue, forKey: Self.temperatureUnitKey) }
+    }
+
+    @Published var appearance: AppAppearance {
+        didSet { storage.write(appearance.rawValue, forKey: Self.appearanceKey) }
     }
 
     private let storage: any SettingsStorage
@@ -82,6 +99,7 @@ final class AppSettings: ObservableObject {
         self.localizationBundle = localizationBundle
         language = storage.read(Self.languageKey).flatMap(AppLanguage.init(rawValue:)) ?? .system
         temperatureUnit = storage.read(Self.temperatureUnitKey).flatMap(TemperatureUnit.init(rawValue:)) ?? .celsius
+        appearance = storage.read(Self.appearanceKey).flatMap(AppAppearance.init(rawValue:)) ?? .system
     }
 
     var locale: Locale { language.locale }

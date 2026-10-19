@@ -35,6 +35,7 @@
 		65AF3D1831FC952B21E6D71B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A23E7EE471796233C2483C1E /* Localizable.strings */; };
 		687F7B33EA3D74C35E747ADA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DFE43220ED22993B9780F5 /* Utils.swift */; };
 		7242A7F977B2E9D1E6FD5863 /* DailyWeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8631CA3374AB5247BE22658 /* DailyWeatherDetailView.swift */; };
+		7B0F6FB254B5AAEFE2826668 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 33F1735B0F49CA05D780A00F /* PrivacyInfo.xcprivacy */; };
 		7F3F24380FC1F7A14DAB6592 /* RegionMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA61B59A478DC5C319D7BF8 /* RegionMapView.swift */; };
 		84ACD50B53819A2840EE4303 /* WeatherStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501BCCDD25FA2CDB3C115552 /* WeatherStatusView.swift */; };
 		9699DC24E31A575DCBF7CAD6 /* RainfallMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BACFFFC670D39BBA66CB61 /* RainfallMap.swift */; };
@@ -101,6 +102,7 @@
 		2749D569EC0D073C575E0ED5 /* RegionalWeatherExplorerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalWeatherExplorerTests.swift; sourceTree = "<group>"; };
 		2FC3B133EDDC463018930CB7 /* RAINFALL_STATIONS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RAINFALL_STATIONS.md; sourceTree = "<group>"; };
 		31F22EC2689C250AD1BE19F4 /* Static.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Static.swift; sourceTree = "<group>"; };
+		33F1735B0F49CA05D780A00F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3990088E33BFCDACA5B7D57E /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		39DBF0FCE4825F36E41C6366 /* FavoriteStationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStationStore.swift; sourceTree = "<group>"; };
 		3B90198EC66D94E2EDAE37D5 /* DashboardSolarTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSolarTimesView.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				6C01A3C6AE6A546A616526C4 /* Assets.xcassets */,
 				6B97555344CE3E99906899B2 /* ContentView.swift */,
 				C84DA37A624AD5FD706CFDA4 /* Info.plist */,
+				33F1735B0F49CA05D780A00F /* PrivacyInfo.xcprivacy */,
 				93DFE43220ED22993B9780F5 /* Utils.swift */,
 				928513F15733EEAC499B154D /* WeatherAppApp.swift */,
 				E6F4A87D3D6B9356A3954EEA /* CustomView */,
@@ -503,6 +506,7 @@
 				C6826733DDCB78F07ABD3823 /* InfoPlist.strings in Resources */,
 				3F2EBC62525EBB0A4BABAD8E /* Localizable.strings in Resources */,
 				2D02D531A111B9C701698CA1 /* Preview Assets.xcassets in Resources */,
+				7B0F6FB254B5AAEFE2826668 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

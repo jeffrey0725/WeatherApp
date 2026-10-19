@@ -30,6 +30,37 @@ final class AppSettingsTests: XCTestCase {
         }
     }
 
+    func testAppearanceDefaultsToSystemAndIsRestored() {
+        onMainActor {
+            let storage = MemorySettingsStorage()
+            let first = AppSettings(storage: storage)
+            XCTAssertEqual(first.appearance, .system)
+            XCTAssertNil(storage.values[AppSettings.appearanceKey], "Nothing is stored until the user chooses")
+            first.appearance = .dark
+            XCTAssertEqual(AppSettings(storage: storage).appearance, .dark)
+            first.appearance = .light
+            XCTAssertEqual(AppSettings(storage: storage).appearance, .light)
+            first.appearance = .system
+            XCTAssertEqual(AppSettings(storage: storage).appearance, .system)
+            storage.values[AppSettings.appearanceKey] = "sepia"
+            XCTAssertEqual(AppSettings(storage: storage).appearance, .system)
+        }
+    }
+
+    func testAppearanceStringsExistInBothLanguages() {
+        onMainActor {
+            let settings = AppSettings(storage: MemorySettingsStorage(), localizationBundle: Bundle(for: Self.self))
+            for language in [AppLanguage.english, .traditionalChinese] {
+                settings.language = language
+                for key in ["settings_appearance", "settings_appearance_help"] + AppAppearance.allCases.map(\.titleKey) {
+                    XCTAssertNotEqual(settings.text(key), key, "\(key) missing for \(language)")
+                }
+            }
+            settings.language = .english
+            XCTAssertEqual(settings.text(AppAppearance.dark.titleKey), "Dark")
+        }
+    }
+
     func testUnknownStoredValuesUseSafeDefaults() {
         onMainActor {
             let storage = MemorySettingsStorage()

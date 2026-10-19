@@ -35,10 +35,10 @@ final class WeatherViewModel: ObservableObject {
     func loadCurrentReport(lang: String) async {
         await load(lang: lang, fetch: {
             var report = try await self.service.currentReport(lang: lang)
-            let coordinates = Dictionary(uniqueKeysWithValues:
+            let coordinates = Dictionary(
                 StationCoordinateStore.stationCoordinates.flatMap { station in
                     [(station.placeTC, station.coordinate), (station.placeEN, station.coordinate)]
-                })
+                }, uniquingKeysWith: { first, _ in first })
             if var stations = report.temperature?.data {
                 for index in stations.indices {
                     if let coordinate = coordinates[stations[index].place ?? ""] {

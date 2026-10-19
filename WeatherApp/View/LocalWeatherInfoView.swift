@@ -29,6 +29,7 @@ struct LocalWeatherInfoView: View {
         .navigationBarTitleDisplayMode(.inline)
         .task(id: settings.apiLanguageCode) { await refresh() }
         .refreshable { await refresh() }
+        .refreshWeatherOnActivation { await refresh() }
     }
 
     @ViewBuilder

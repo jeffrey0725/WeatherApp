@@ -85,6 +85,7 @@
 "favorites_save_error_message" = "未能儲存更改，請稍後重試。";
 "favorites_storage_error_title" = "暫時未能開啟收藏";
 "favorites_storage_error_message" = "未能開啟已收藏的氣象站，請稍後重試。";
+"favorites_storage_unavailable_note" = "天氣資料仍可使用，但在問題解決前收藏不會被儲存。";
 "favorites_loading" = "正在開啟收藏氣象站…";
 
 "station_temperature" = "觀測氣溫";
@@ -97,6 +98,11 @@
 "settings_language_help" = "更改介面及天氣預報的語言。已收藏的氣象站和標籤會保留。";
 "settings_temperature_unit" = "氣溫單位";
 "settings_temperature_help" = "更改氣溫讀數及預報範圍的單位。天文台預報文字會保留原文。";
+"settings_appearance" = "外觀";
+"settings_appearance_system" = "跟隨裝置";
+"settings_appearance_light" = "淺色";
+"settings_appearance_dark" = "深色";
+"settings_appearance_help" = "選擇淺色或深色外觀，或跟隨裝置設定。";
 "settings_done" = "完成";
 "weather_error_connection" = "未能連線至天文台，請檢查網絡連線並重試。";
 "weather_error_timeout" = "天氣查詢逾時，請稍後重試。";

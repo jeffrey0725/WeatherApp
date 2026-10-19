@@ -85,6 +85,7 @@
 "favorites_save_error_message" = "Your changes were not saved. Please try again.";
 "favorites_storage_error_title" = "Saved stations unavailable";
 "favorites_storage_error_message" = "Your saved stations could not be opened. Please try again.";
+"favorites_storage_unavailable_note" = "Weather is still available, but favorites will not be saved until this is resolved.";
 "favorites_loading" = "Opening saved stations…";
 
 "station_temperature" = "Observed temperature";
@@ -97,6 +98,11 @@
 "settings_language_help" = "Changes app text and weather forecasts. Your favorite stations and labels are preserved.";
 "settings_temperature_unit" = "Temperature unit";
 "settings_temperature_help" = "Changes temperature readings and forecast ranges. Official forecast text keeps its original wording.";
+"settings_appearance" = "Appearance";
+"settings_appearance_system" = "Follow device";
+"settings_appearance_light" = "Light";
+"settings_appearance_dark" = "Dark";
+"settings_appearance_help" = "Choose a light or dark look, or follow your device setting.";
 "settings_done" = "Done";
 "weather_error_connection" = "Could not connect to HKO. Check your internet connection and try again.";
 "weather_error_timeout" = "The weather request timed out. Please try again.";

@@ -10,7 +10,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(settings.text("weather_hong_kong")).font(.title2.bold())
                         Text(settings.text("weather_data_source"))
@@ -22,7 +22,7 @@ struct HomeView: View {
                     }
                     WeatherDashboardSectionView(title: "weather_warnings_title", section: viewModel.warnings, isRefreshing: viewModel.isLoading, retry: retry) { report in
                         DashboardWarningsView(report: report, lastChecked: viewModel.warnings.lastChecked,
-                                              isPrevious: viewModel.warnings.errorMessage != nil || viewModel.warnings.isLoading)
+                                              isPrevious: viewModel.warnings.errorMessage != nil)
                     }
                     DashboardFavoriteStationsView(section: viewModel.current, isRefreshing: viewModel.isLoading, retry: retry)
                     DashboardSolarTimesView(viewModel: solarTimes, isRefreshing: isRefreshing, retry: retry)

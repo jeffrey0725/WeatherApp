@@ -16,12 +16,12 @@ struct DashboardFavoriteStationsView: View {
             if favorites.isEmpty {
                 Text(settings.text("favorites_empty_message")).font(.subheadline).foregroundStyle(.secondary)
             } else {
-                if section.isLoading { ProgressView(settings.text("weather_loading")) }
+                if section.isLoading && section.value == nil { ProgressView(settings.text("weather_loading")) }
                 if section.errorMessage != nil {
                     Text(settings.text("favorites_weather_error")).font(.subheadline)
                     Button(settings.text("weather_retry"), action: retry).disabled(isRefreshing)
                 }
-                if section.value != nil && (section.isLoading || section.errorMessage != nil) {
+                if section.value != nil && section.errorMessage != nil {
                     Text(settings.text("weather_previous_data")).font(.caption).foregroundStyle(.secondary)
                 }
                 ForEach(favorites) { favorite in
@@ -29,9 +29,7 @@ struct DashboardFavoriteStationsView: View {
                     let name = station?.name(lang: settings.apiLanguageCode) ?? favorite.stationID
                     let reading = station?.temperature(in: section.value)
                     NavigationLink {
-                        FavoriteStationDetailView(stationID: favorite.stationID, label: favorite.label,
-                                                  report: section.value,
-                                                  isPrevious: section.isLoading || section.errorMessage != nil)
+                        FavoriteStationDetailView(stationID: favorite.stationID, label: favorite.label)
                     } label: {
                         VStack(alignment: .leading, spacing: 8) {
                             Text(favorite.label.isEmpty ? name : favorite.label).font(.subheadline.bold())
@@ -65,8 +63,12 @@ private struct FavoriteStationDetailView: View {
     @EnvironmentObject private var settings: AppSettings
     let stationID: String
     let label: String
-    let report: RegionWeatherForecast?
-    let isPrevious: Bool
+    @StateObject private var viewModel = WeatherViewModel()
+
+    private var report: RegionWeatherForecast? {
+        viewModel.lastChecked == nil ? nil : viewModel.regionWeatherForecast
+    }
+    private var isPrevious: Bool { viewModel.isLoading || viewModel.errorMessage != nil }
 
     private var station: StationCoordinate? { StationCoordinateStore.station(withID: stationID) }
     private var name: String { station?.name(lang: settings.apiLanguageCode) ?? stationID }
@@ -75,6 +77,7 @@ private struct FavoriteStationDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text(name).font(.title2.bold())
+                WeatherStatusView(viewModel: viewModel) { Task { await refresh() } }
                 if isPrevious && report != nil {
                     Text(settings.text("weather_previous_data")).font(.caption).foregroundStyle(.secondary)
                 }
@@ -96,5 +99,12 @@ private struct FavoriteStationDetailView: View {
         }
         .navigationTitle(label.isEmpty ? name : label)
         .navigationBarTitleDisplayMode(.inline)
+        .task(id: settings.apiLanguageCode) { await refresh() }
+        .refreshable { await refresh() }
+        .refreshWeatherOnActivation { await refresh() }
+    }
+
+    private func refresh() async {
+        await viewModel.loadCurrentReport(lang: settings.apiLanguageCode)
     }
 }
