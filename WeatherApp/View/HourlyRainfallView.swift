@@ -6,6 +6,7 @@ struct HourlyRainfallView: View {
     @StateObject private var viewModel = HourlyRainfallViewModel()
     @State private var query = ""
     @State private var showsMap = false
+    @State private var isWide = false
     @State private var selectedStation: RainfallStationSelection?
     @ScaledMetric private var chartRowHeight = 48.0
 
@@ -23,9 +24,10 @@ struct HourlyRainfallView: View {
                 Text(settings.text("weather_data_source")).font(.caption).foregroundStyle(.secondary)
             }
             .padding()
-            .frame(maxWidth: 900, alignment: .leading)
+            .frame(maxWidth: 1100, alignment: .leading)
             .frame(maxWidth: .infinity)
         }
+        .onWideLayoutChange { isWide = $0 }
         .background(Color(.systemGroupedBackground))
         .navigationTitle(settings.text("rainfall_title"))
         .navigationBarTitleDisplayMode(.inline)
@@ -34,13 +36,10 @@ struct HourlyRainfallView: View {
         .scrollDismissesKeyboard(.interactively)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(action: retry) {
-                    if viewModel.section.isLoading { ProgressView() }
-                    else { Image(systemName: "arrow.clockwise") }
-                }
-                .disabled(viewModel.section.isLoading)
-                .accessibilityLabel(settings.text("weather_refresh"))
+                Button(action: retry) { RefreshToolbarLabel(isLoading: viewModel.section.isLoading) }
+                    .disabled(viewModel.section.isLoading)
             }
+            .keepVisibleLongest()
         }
         .task(id: settings.apiLanguageCode) { await refresh() }
         .refreshable { await refresh() }
@@ -58,75 +57,96 @@ struct HourlyRainfallView: View {
     private func rainfall(_ report: HourlyRainfallReport) -> some View {
         let results = RainfallMapResults(report: report, query: query)
         let ranked = results.ranked
+        // A wide window shows the map and the ranking together; a narrow one switches between them.
+        let mapShown = isWide || showsMap
+        let listShown = isWide || !showsMap
+        let layout = isWide
+            ? AnyLayout(HStackLayout(alignment: .top, spacing: 16))
+            : AnyLayout(VStackLayout(alignment: .leading, spacing: 0))
         if report.readings.isEmpty {
             ContentUnavailableView(settings.text("rainfall_empty"), systemImage: "cloud.rain")
         } else {
-            Picker(settings.text("explorer_display_mode"), selection: $showsMap) {
-                Text(settings.text("explorer_list")).tag(false)
-                Text(settings.text("explorer_map")).tag(true)
+            if !isWide {
+                Picker(settings.text("explorer_display_mode"), selection: $showsMap) {
+                    Text(settings.text("explorer_list")).tag(false)
+                    Text(settings.text("explorer_map")).tag(true)
+                }
+                .pickerStyle(.segmented)
             }
-            .pickerStyle(.segmented)
 
-            // Keep the map mounted across display/filter changes; the page owns
-            // selection so an empty result cannot dismiss an open station sheet.
-            RainfallMapView(stations: results.stations, onSelect: { select($0, in: report) })
-                .overlay {
-                    if results.stations.isEmpty && showsMap {
-                        ContentUnavailableView(settings.text(ranked.isEmpty ? "explorer_no_matches" : "rainfall_no_locations"),
-                                               systemImage: "mappin.slash")
+            layout {
+                // Keep the map mounted across display/filter changes; the page owns
+                // selection so an empty result cannot dismiss an open station sheet.
+                VStack(alignment: .leading, spacing: 12) {
+                    RainfallMapView(stations: results.stations, onSelect: { select($0, in: report) })
+                        .overlay {
+                            if results.stations.isEmpty && mapShown {
+                                ContentUnavailableView(settings.text(ranked.isEmpty ? "explorer_no_matches" : "rainfall_no_locations"),
+                                                       systemImage: "mappin.slash")
+                            }
+                        }
+                        .frame(height: mapShown ? (isWide ? 600 : 440) : 0)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .opacity(mapShown ? 1 : 0)
+                        .allowsHitTesting(mapShown)
+                        .accessibilityHidden(!mapShown)
+                    if mapShown {
+                        Text(settings.text("rainfall_map_help")).font(.caption).foregroundStyle(.secondary)
+                        Text(settings.text("rainfall_map_legend")).font(.caption).foregroundStyle(.secondary)
+                        Text(settings.text("rainfall_map_zoom_hint")).font(.caption).foregroundStyle(.secondary)
+                        if !results.unmapped.isEmpty {
+                            Text("\(settings.text("rainfall_unmapped_count")): \(results.unmapped.count)")
+                                .font(.caption).foregroundStyle(.secondary)
+                            if !isWide {
+                                Button(settings.text("rainfall_show_list")) { showsMap = false }
+                                    .frame(minHeight: 44)
+                            }
+                        }
                     }
                 }
-                .frame(height: showsMap ? 440 : 0)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .opacity(showsMap ? 1 : 0)
-                .allowsHitTesting(showsMap)
-                .accessibilityHidden(!showsMap)
-            if showsMap {
-                Text(settings.text("rainfall_map_help")).font(.caption).foregroundStyle(.secondary)
-                Text(settings.text("rainfall_map_legend")).font(.caption).foregroundStyle(.secondary)
-                if !results.unmapped.isEmpty {
-                    Text("\(settings.text("rainfall_unmapped_count")): \(results.unmapped.count)")
-                        .font(.caption).foregroundStyle(.secondary)
-                    Button(settings.text("rainfall_show_list")) { showsMap = false }
-                        .frame(minHeight: 44)
-                }
-            }
-            if ranked.isEmpty {
-                if !showsMap {
-                    ContentUnavailableView {
-                        Label(settings.text("explorer_no_matches"), systemImage: "magnifyingglass")
-                    } description: {
-                        Text(settings.text("explorer_search_help"))
-                    }
-                }
-                Button(settings.text("explorer_clear_search")) { query = "" }
-                    .frame(minHeight: 44)
-            } else {
-                let measured = ranked.filter { $0.amount != nil }
-                let wettest = Array(ranked.filter { ($0.amount ?? 0) > 0 }.prefix(5))
-                Divider()
-                Text("\(settings.text("rainfall_matching_stations")): \(ranked.count)").font(.headline)
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 180), alignment: .topLeading)],
-                          alignment: .leading, spacing: 16) {
-                    metric("rainfall_highest", value: settings.measurement(measured.first?.amount, unit: "mm"))
-                    metric("rainfall_wet_count", value: String(measured.filter { ($0.amount ?? 0) > 0 }.count))
-                    metric("rainfall_unavailable_count", value: String(ranked.count - measured.count))
-                }
+                .frame(maxWidth: .infinity, alignment: .topLeading)
 
-                if !showsMap {
-                    if !wettest.isEmpty {
-                        Text(settings.text("rainfall_chart_title")).font(.headline)
-                        rainfallChart(wettest)
+                VStack(alignment: .leading, spacing: 12) {
+                    if ranked.isEmpty {
+                        if !mapShown {
+                            ContentUnavailableView {
+                                Label(settings.text("explorer_no_matches"), systemImage: "magnifyingglass")
+                            } description: {
+                                Text(settings.text("explorer_search_help"))
+                            }
+                        }
+                        Button(settings.text("explorer_clear_search")) { query = "" }
+                            .frame(minHeight: 44)
                     } else {
-                        Text(settings.text(measured.isEmpty ? "rainfall_no_readings" : "rainfall_zero_readings"))
-                            .font(.subheadline).foregroundStyle(.secondary)
+                        let measured = ranked.filter { $0.amount != nil }
+                        let wettest = Array(ranked.filter { ($0.amount ?? 0) > 0 }.prefix(5))
+                        if !isWide { Divider() }
+                        Text("\(settings.text("rainfall_matching_stations")): \(ranked.count)").font(.headline)
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 180), alignment: .topLeading)],
+                                  alignment: .leading, spacing: 16) {
+                            metric("rainfall_highest", value: settings.measurement(measured.first?.amount, unit: "mm"))
+                            metric("rainfall_wet_count", value: String(measured.filter { ($0.amount ?? 0) > 0 }.count))
+                            metric("rainfall_unavailable_count", value: String(ranked.count - measured.count))
+                        }
+
+                        if listShown {
+                            if !wettest.isEmpty {
+                                Text(settings.text("rainfall_chart_title")).font(.headline)
+                                rainfallChart(wettest)
+                            } else {
+                                Text(settings.text(measured.isEmpty ? "rainfall_no_readings" : "rainfall_zero_readings"))
+                                    .font(.subheadline).foregroundStyle(.secondary)
+                            }
+                            Divider()
+                            Text(settings.text("rainfall_ranking")).font(.headline)
+                            Text(settings.text("rainfall_ranking_help")).font(.caption).foregroundStyle(.secondary)
+                            rankedList(ranked, report: report)
+                        }
                     }
-                    Divider()
-                    Text(settings.text("rainfall_ranking")).font(.headline)
-                    Text(settings.text("rainfall_ranking_help")).font(.caption).foregroundStyle(.secondary)
-                    rankedList(ranked, report: report)
                 }
-            }
+                .padding(.top, !isWide ? 12 : 0)
+                .frame(maxWidth: .infinity, alignment: .topLeading)
+            }.layoutIdentifier(isWide: isWide)
         }
     }
 

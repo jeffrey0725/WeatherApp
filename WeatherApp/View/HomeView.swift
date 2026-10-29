@@ -10,13 +10,8 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(settings.text("weather_hong_kong")).font(.title2.bold())
-                        Text(settings.text("weather_data_source"))
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-
+                TwoColumnWhenWide {
+                    header
                     WeatherDashboardSectionView(title: "weather_conditions", section: viewModel.current, isRefreshing: viewModel.isLoading, retry: retry) { report in
                         DashboardConditionsView(report: report)
                     }
@@ -25,6 +20,13 @@ struct HomeView: View {
                                               isPrevious: viewModel.warnings.errorMessage != nil)
                     }
                     DashboardFavoriteStationsView(section: viewModel.current, isRefreshing: viewModel.isLoading, retry: retry)
+                    shortcut(icon: "map.fill", title: "weather_regional_shortcut", subtitle: "weather_regional_description") {
+                        RegionalWeatherExplorerView()
+                    }
+                    shortcut(icon: "cloud.rain.fill", title: "rainfall_title", subtitle: "rainfall_shortcut_description") {
+                        HourlyRainfallView()
+                    }
+                } trailing: {
                     DashboardSolarTimesView(viewModel: solarTimes, isRefreshing: isRefreshing, retry: retry)
                     WeatherDashboardSectionView(title: "local_weather_title", section: viewModel.local, isRefreshing: viewModel.isLoading, retry: retry) { forecast in
                         DashboardLocalForecastView(forecast: forecast)
@@ -32,76 +34,23 @@ struct HomeView: View {
                     WeatherDashboardSectionView(title: "weather_next_three_days", section: viewModel.forecast, isRefreshing: viewModel.isLoading, retry: retry) { forecast in
                         DashboardForecastPreviewView(forecast: forecast)
                     }
-
-                    NavigationLink {
-                        RegionalWeatherExplorerView()
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "map.fill").font(.title2)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(settings.text("weather_regional_shortcut")).font(.headline)
-                                Text(settings.text("weather_regional_description"))
-                                    .font(.subheadline).foregroundStyle(.secondary)
-                            }
-                            Spacer(minLength: 0)
-                            Image(systemName: "chevron.right").font(.caption.bold())
-                        }
-                        .padding(20)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
-                    }
-                    .buttonStyle(.plain)
-
-                    NavigationLink {
-                        HourlyRainfallView()
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "cloud.rain.fill").font(.title2)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(settings.text("rainfall_title")).font(.headline)
-                                Text(settings.text("rainfall_shortcut_description"))
-                                    .font(.subheadline).foregroundStyle(.secondary)
-                            }
-                            Spacer(minLength: 0)
-                            Image(systemName: "chevron.right").font(.caption.bold())
-                        }
-                        .padding(20)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
-                    }
-                    .buttonStyle(.plain)
-
-                    // Detail screens remain accessible even if a dashboard request fails.
-                    NavigationLink(settings.text("weather_browse_reports")) {
-                        List {
-                            NavigationLink(settings.text("favorites_title")) { FavoriteStationsView() }
-                            NavigationLink(settings.text("local_weather_title")) { LocalWeatherInfoView() }
-                            NavigationLink(settings.text("nine_weather_title")) { NineDayWeatherInfoView() }
-                            NavigationLink(settings.text("region_weather_title")) { RegionWeatherInfoView() }
-                            NavigationLink(settings.text("rainfall_title")) { HourlyRainfallView() }
-                            NavigationLink(settings.text("weather_warnings_title")) { WeatherWarningsView() }
-                        }
-                        .navigationTitle(settings.text("weather_browse_reports"))
-                    }
-                    .font(.subheadline)
+                    browseReports
                 }
                 .padding()
-                .frame(maxWidth: 680, alignment: .leading)
+                .frame(maxWidth: AdaptiveLayout.dashboardMaxWidth)
                 .frame(maxWidth: .infinity)
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle(settings.text("weather_today"))
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button { showingSettings = true } label: { Image(systemName: "gearshape") }
-                        .accessibilityLabel(settings.text("settings_title"))
-                    Button(action: retry) {
-                        if isRefreshing { ProgressView() }
-                        else { Image(systemName: "arrow.clockwise") }
+                    Button { showingSettings = true } label: {
+                        Label(settings.text("settings_title"), systemImage: "gearshape")
                     }
-                    .disabled(isRefreshing)
-                    .accessibilityLabel(settings.text("weather_refresh"))
+                    Button(action: retry) { RefreshToolbarLabel(isLoading: isRefreshing) }
+                        .disabled(isRefreshing)
                 }
+                .keepVisibleLongest()
             }
             .task(id: settings.apiLanguageCode) { await refresh() }
             .refreshable { await refresh() }
@@ -111,6 +60,52 @@ struct HomeView: View {
             NavigationStack { SettingView() }
                 .presentationDragIndicator(.visible)
         }
+    }
+
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(settings.text("weather_hong_kong")).font(.title2.bold())
+            Text(settings.text("weather_data_source"))
+                .font(.caption).foregroundStyle(.secondary)
+        }
+    }
+
+    private func shortcut<Destination: View>(icon: String, title: String, subtitle: String,
+                                             @ViewBuilder destination: () -> Destination) -> some View {
+        NavigationLink {
+            destination()
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: icon).font(.title2)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(settings.text(title)).font(.headline)
+                    Text(settings.text(subtitle)).font(.subheadline).foregroundStyle(.secondary)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right").font(.caption.bold())
+            }
+            .padding(20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.groupedCard, in: RoundedRectangle(cornerRadius: 20))
+        }
+        .buttonStyle(.plain)
+    }
+
+    // Detail screens remain accessible even if a dashboard request fails.
+    private var browseReports: some View {
+        NavigationLink(settings.text("weather_browse_reports")) {
+            List {
+                NavigationLink(settings.text("favorites_title")) { FavoriteStationsView() }
+                NavigationLink(settings.text("local_weather_title")) { LocalWeatherInfoView() }
+                NavigationLink(settings.text("nine_weather_title")) { NineDayWeatherInfoView() }
+                NavigationLink(settings.text("region_weather_title")) { RegionWeatherInfoView() }
+                NavigationLink(settings.text("rainfall_title")) { HourlyRainfallView() }
+                NavigationLink(settings.text("weather_warnings_title")) { WeatherWarningsView() }
+            }
+            .navigationTitle(settings.text("weather_browse_reports"))
+        }
+        .font(.subheadline)
     }
 
     private func retry() {

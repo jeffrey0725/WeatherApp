@@ -192,6 +192,7 @@
 "nearby_distance" = "約略距離";
 "nearby_show_map" = "在地圖顯示";
 "rainfall_map_help" = "點選測站查看雨量及觀測時段，切換至列表查看完整排名。";
+"rainfall_map_zoom_hint" = "縮小地圖時標記只顯示毫米數值，放大可查看完整標籤。";
 "rainfall_map_legend" = "藍色：錄得雨量 · 藍綠色：0 毫米 · M：維修中 · —：未能提供";
 "rainfall_no_locations" = "這些測站尚未有已核實的地圖位置";
 "rainfall_unmapped_count" = "僅於列表顯示的測站（位置尚未核實）";

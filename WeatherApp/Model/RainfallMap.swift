@@ -21,6 +21,24 @@ struct RainfallMapResults {
     }
 }
 
+/// How rainfall pins are drawn. At the default zoom the whole territory is visible and the full
+/// "0 mm" capsules cover each other, so zoomed-out maps use small value-only pins.
+enum RainfallMarkerStyle {
+    /// Visible latitude span (degrees) above which pins are compact; Hong Kong is about 0.35 tall.
+    static let compactLatitudeSpan = 0.12
+
+    static func isCompact(latitudeSpan: Double) -> Bool { latitudeSpan > compactLatitudeSpan }
+
+    /// Value without the unit; maintenance and unavailable keep their symbols.
+    static func compactText(for status: HourlyRainfallReading.Status) -> String {
+        switch status {
+        case .measured(let amount): return String(amount)
+        case .maintenance: return "M"
+        case .unavailable: return "—"
+        }
+    }
+}
+
 // Capture the reading and observation interval together. Refreshes never change
 // the content beneath an open sheet, including a maintenance/unavailable selection.
 struct RainfallStationSelection: Identifiable {

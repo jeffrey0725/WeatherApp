@@ -192,6 +192,7 @@
 "nearby_distance" = "Approximate distance";
 "nearby_show_map" = "Show on map";
 "rainfall_map_help" = "Tap a station for its rainfall and observation period. Switch to List for the full ranking.";
+"rainfall_map_zoom_hint" = "Zoomed-out pins show millimetres only; zoom in for full labels.";
 "rainfall_map_legend" = "Blue: recorded rain · Teal: 0 mm · M: maintenance · —: unavailable";
 "rainfall_no_locations" = "No verified map locations for these stations";
 "rainfall_unmapped_count" = "Stations available only in List (location unverified)";

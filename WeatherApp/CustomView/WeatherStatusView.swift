@@ -22,6 +22,35 @@ private struct WeatherActivationRefresh: ViewModifier {
     }
 }
 
+/// Refresh toolbar label with both a title and a symbol, so the system can show it as an icon (the
+/// iPhone Duo's side toolbar), an icon or a title, or both in an overflow menu. While loading the symbol
+/// pulses instead of being swapped for a ProgressView, because a custom view is not shown in the side toolbar.
+struct RefreshToolbarLabel: View {
+    @EnvironmentObject private var settings: AppSettings
+    let isLoading: Bool
+
+    var body: some View {
+        Label {
+            Text(settings.text("weather_refresh"))
+        } icon: {
+            Image(systemName: "arrow.clockwise").symbolEffect(.pulse, isActive: isLoading)
+        }
+    }
+}
+
+extension ToolbarContent {
+    /// Keeps frequently used items visible longest when the iPhone Duo's side toolbar runs out of room
+    /// (visibility priority exists from iOS 27; earlier systems ignore it).
+    @ToolbarContentBuilder
+    func keepVisibleLongest() -> some ToolbarContent {
+        if #available(iOS 27.0, *) {
+            self.visibilityPriority(.high)
+        } else {
+            self
+        }
+    }
+}
+
 struct WeatherStatusView: View {
     @EnvironmentObject private var settings: AppSettings
     @ObservedObject var viewModel: WeatherViewModel

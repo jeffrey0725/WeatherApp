@@ -91,6 +91,7 @@ struct RegionWeatherInfoView: View {
                         }
                     }
                     RegionMapView(stations: stations, observationTime: temperature.recordTime)
+                        .frame(height: 500)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)

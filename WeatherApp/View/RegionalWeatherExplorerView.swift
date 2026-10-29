@@ -12,6 +12,7 @@ struct RegionalWeatherExplorerView: View {
     @State private var displayMode: RegionalExplorerDisplayMode = .map
     @State private var sortOrder: RegionalStationSort = .name
     @State private var selectedStation: RegionalStationSelection?
+    @State private var isWide = false
 
     private var favoriteIDs: Set<String> { Set(favorites.map(\.stationID)) }
     private var results: RegionalWeatherExplorerResults {
@@ -48,13 +49,15 @@ struct RegionalWeatherExplorerView: View {
                     .pickerStyle(.segmented)
                     .accessibilityLabel(settings.text("explorer_filter"))
 
-                    Picker(settings.text("explorer_display_mode"), selection: $displayMode) {
-                        ForEach(RegionalExplorerDisplayMode.allCases) { mode in
-                            Text(settings.text(mode.titleKey)).tag(mode)
+                    if !isWide {
+                        Picker(settings.text("explorer_display_mode"), selection: $displayMode) {
+                            ForEach(RegionalExplorerDisplayMode.allCases) { mode in
+                                Text(settings.text(mode.titleKey)).tag(mode)
+                            }
                         }
+                        .pickerStyle(.segmented)
+                        .accessibilityLabel(settings.text("explorer_display_mode"))
                     }
-                    .pickerStyle(.segmented)
-                    .accessibilityLabel(settings.text("explorer_display_mode"))
 
                     WeatherStatusView(viewModel: viewModel, retry: retry)
                     if let checked = viewModel.lastChecked {
@@ -72,9 +75,10 @@ struct RegionalWeatherExplorerView: View {
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 .padding()
-                .frame(maxWidth: 900, alignment: .leading)
+                .frame(maxWidth: 1100, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
+            .onWideLayoutChange { isWide = $0 }
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle(settings.text("explorer_title"))
@@ -87,15 +91,13 @@ struct RegionalWeatherExplorerView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-                NavigationLink { RegionWeatherInfoView() } label: { Image(systemName: "info.circle") }
-                    .accessibilityLabel(settings.text("region_weather_title"))
-                Button(action: retry) {
-                    if viewModel.isLoading { ProgressView() }
-                    else { Image(systemName: "arrow.clockwise") }
+                NavigationLink { RegionWeatherInfoView() } label: {
+                    Label(settings.text("region_weather_title"), systemImage: "info.circle")
                 }
-                .disabled(viewModel.isLoading)
-                .accessibilityLabel(settings.text("weather_refresh"))
+                Button(action: retry) { RefreshToolbarLabel(isLoading: viewModel.isLoading) }
+                    .disabled(viewModel.isLoading)
             }
+            .keepVisibleLongest()
         }
         .task(id: settings.apiLanguageCode) { await refresh() }
         .refreshable { await refresh() }
@@ -109,9 +111,15 @@ struct RegionalWeatherExplorerView: View {
     private var observations: some View {
         let results = results
         let readings = results.mapReadings(lang: settings.apiLanguageCode)
+        // A wide window shows the map and the list together; a narrow one switches between them.
+        let showsMap = isWide || displayMode == .map
+        let showsList = isWide || displayMode == .list
+        let layout = isWide
+            ? AnyLayout(HStackLayout(alignment: .top, spacing: 16))
+            : AnyLayout(VStackLayout(alignment: .leading, spacing: 0))
         return VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("\(settings.text("explorer_station_count")): \(displayMode == .map ? readings.count : results.stations.count)").font(.headline)
+                Text("\(settings.text("explorer_station_count")): \(showsList ? results.stations.count : readings.count)").font(.headline)
                 Spacer()
                 NavigationLink(settings.text("favorites_manage")) { FavoriteStationsView() }
                     .font(.subheadline)
@@ -123,43 +131,53 @@ struct RegionalWeatherExplorerView: View {
 
             // Preserve the camera while switching views. The explorer owns the
             // sheet, including when removing the final favorite empties the list.
-            RegionMapView(stations: readings,
-                          observationTime: viewModel.regionWeatherForecast.temperature?.recordTime,
-                          selectionID: selectedStation?.id, onSelect: { selectedStation = $0 })
-                .overlay {
-                    if readings.isEmpty && displayMode == .map { emptyResults(results) }
-                }
-                .frame(height: displayMode == .map ? 500 : 0)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .opacity(displayMode == .map ? 1 : 0)
-                .allowsHitTesting(displayMode == .map)
-                .accessibilityHidden(displayMode != .map)
-                .id("regional-map")
-
-            if displayMode == .list {
-                Picker(settings.text("explorer_sort"), selection: $sortOrder) {
-                    ForEach(RegionalStationSort.allCases) { order in
-                        Text(settings.text(order.titleKey)).tag(order)
+            layout {
+                VStack(alignment: .leading, spacing: 12) {
+                    RegionMapView(stations: readings,
+                                  observationTime: viewModel.regionWeatherForecast.temperature?.recordTime,
+                                  selectionID: selectedStation?.id, onSelect: { selectedStation = $0 })
+                        .overlay {
+                            if readings.isEmpty && showsMap && (!isWide || !results.stations.isEmpty) { emptyResults(results) }
+                        }
+                        .frame(height: showsMap ? (isWide ? 600 : 500) : 0)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .opacity(showsMap ? 1 : 0)
+                        .allowsHitTesting(showsMap)
+                        .accessibilityHidden(!showsMap)
+                        .id("regional-map")
+                    if showsMap && !readings.isEmpty {
+                        Text(settings.text("explorer_map_help")).font(.caption).foregroundStyle(.secondary)
                     }
                 }
-                .pickerStyle(.menu)
-                .frame(minHeight: 44)
-                .accessibilityLabel(settings.text("explorer_sort"))
+                .frame(maxWidth: .infinity, alignment: .topLeading)
 
-                if results.stations.isEmpty {
-                    emptyResults(results).frame(minHeight: 220)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                } else {
-                    Text(settings.text("explorer_list_help")).font(.caption).foregroundStyle(.secondary)
-                    RegionalStationListView(stations: results.listStations(sort: sortOrder, lang: settings.apiLanguageCode),
-                                            favoriteIDs: favoriteIDs,
-                                            observationTime: viewModel.regionWeatherForecast.temperature?.recordTime,
-                                            onSelect: { selectedStation = $0 })
+                VStack(alignment: .leading, spacing: 12) {
+                    if showsList {
+                        Picker(settings.text("explorer_sort"), selection: $sortOrder) {
+                            ForEach(RegionalStationSort.allCases) { order in
+                                Text(settings.text(order.titleKey)).tag(order)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .frame(minHeight: 44)
+                        .accessibilityLabel(settings.text("explorer_sort"))
+
+                        if results.stations.isEmpty {
+                            emptyResults(results).frame(minHeight: 220)
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                        } else {
+                            Text(settings.text("explorer_list_help")).font(.caption).foregroundStyle(.secondary)
+                            RegionalStationListView(stations: results.listStations(sort: sortOrder, lang: settings.apiLanguageCode),
+                                                    favoriteIDs: favoriteIDs,
+                                                    observationTime: viewModel.regionWeatherForecast.temperature?.recordTime,
+                                                    onSelect: { selectedStation = $0 })
+                        }
+                    }
                 }
-            } else if !readings.isEmpty {
-                Text(settings.text("explorer_map_help")).font(.caption).foregroundStyle(.secondary)
-            }
-            if results.unavailableCount > 0 && (displayMode == .list || !readings.isEmpty) {
+                .padding(.top, !isWide && showsList ? 12 : 0)
+                .frame(maxWidth: .infinity, alignment: .topLeading)
+            }.layoutIdentifier(isWide: isWide)
+            if results.unavailableCount > 0 && (showsList || !readings.isEmpty) {
                 Text("\(settings.text("explorer_unavailable_count")): \(results.unavailableCount)")
                     .font(.caption).foregroundStyle(.secondary)
             }
@@ -184,7 +202,7 @@ struct RegionalWeatherExplorerView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.secondarySystemBackground))
+        .background(Color.groupedCard)
     }
 
     private func retry() { Task { await refresh() } }

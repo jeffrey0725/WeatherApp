@@ -39,8 +39,8 @@ struct BannerDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(settings.text("weather_close")) {
-                        dismiss()
+                    Button { dismiss() } label: {
+                        Label(settings.text("weather_close"), systemImage: "xmark")
                     }
                 }
             }

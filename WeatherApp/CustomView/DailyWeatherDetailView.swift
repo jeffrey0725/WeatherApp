@@ -37,7 +37,7 @@ struct DailyWeatherDetailView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
+        .background(Color.groupedCardInset, in: RoundedRectangle(cornerRadius: 12))
     }
 
     private func metric(_ title: String, value: String) -> some View {

@@ -43,13 +43,10 @@ struct NineDayWeatherInfoView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(action: retry) {
-                    if weatherViewModel.isLoading { ProgressView() }
-                    else { Image(systemName: "arrow.clockwise") }
-                }
-                .disabled(weatherViewModel.isLoading)
-                .accessibilityLabel(settings.text("weather_refresh"))
+                Button(action: retry) { RefreshToolbarLabel(isLoading: weatherViewModel.isLoading) }
+                    .disabled(weatherViewModel.isLoading)
             }
+            .keepVisibleLongest()
         }
         .task(id: settings.apiLanguageCode) { await refresh() }
         .refreshable { await refresh() }

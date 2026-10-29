@@ -38,7 +38,7 @@ struct WeatherDashboardSectionView<Value, Content: View>: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
+        .background(Color.groupedCard, in: RoundedRectangle(cornerRadius: 20))
     }
 }
 

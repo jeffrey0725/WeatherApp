@@ -134,6 +134,27 @@ final class RainfallMapTests: XCTestCase {
         XCTAssertEqual(second.stations.first?.reading.amount, 0)
     }
 
+    func testMarkersAreCompactOnlyWhenZoomedOut() {
+        // The territory-wide default view (about 0.35 degrees tall) is compact; a district view is not.
+        XCTAssertTrue(RainfallMarkerStyle.isCompact(latitudeSpan: 0.35))
+        XCTAssertTrue(RainfallMarkerStyle.isCompact(latitudeSpan: 0.121))
+        XCTAssertFalse(RainfallMarkerStyle.isCompact(latitudeSpan: 0.12))
+        XCTAssertFalse(RainfallMarkerStyle.isCompact(latitudeSpan: 0.02))
+    }
+
+    func testCompactMarkerTextKeepsZeroAndStatusSymbols() throws {
+        let report = try decode([station("RF020", value: "0"), station("RF021", value: "12"),
+                                 ["automaticWeatherStationID": "RF022", "value": "M", "unit": "M"],
+                                 ["automaticWeatherStationID": "RF023", "value": "", "unit": "mm"]])
+        let text = Dictionary(uniqueKeysWithValues: report.readings.map {
+            ($0.id, RainfallMarkerStyle.compactText(for: $0.status))
+        })
+        XCTAssertEqual(text["RF020"], "0", "A real zero stays visible")
+        XCTAssertEqual(text["RF021"], "12")
+        XCTAssertEqual(text["RF022"], "M")
+        XCTAssertEqual(text["RF023"], "—")
+    }
+
     private func station(_ id: String, value: String) -> [String: String] {
         ["automaticWeatherStationID": id, "value": value, "unit": "mm"]
     }

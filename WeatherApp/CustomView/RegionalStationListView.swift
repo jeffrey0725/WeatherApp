@@ -32,7 +32,7 @@ struct RegionalStationListView: View {
                     }
                     .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                     .padding(16)
-                    .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
+                    .background(Color.groupedCard, in: RoundedRectangle(cornerRadius: 16))
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)

@@ -26,6 +26,7 @@
 		2FABA70C484B705F3A657CE5 /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402CF286D9E5DFA71045A409 /* WeatherService.swift */; };
 		3CEF5011B5293C5227433974 /* NineDayWeatherInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665FCD1A4A311996FDFE3E5D /* NineDayWeatherInfoView.swift */; };
 		3F2EBC62525EBB0A4BABAD8E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A23E7EE471796233C2483C1E /* Localizable.strings */; };
+		44150B7705D01CD19699F7D6 /* AdaptiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BC59108267C0DA26AB688A /* AdaptiveLayout.swift */; };
 		4688D0F27DFB9439B9A1EAEA /* RainfallStationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8FCB5EE9E4013F042B2AD2 /* RainfallStationSheet.swift */; };
 		4C6317133B0A590573B79471 /* WeatherRequestCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25D31E7E716BC77E963E01D /* WeatherRequestCoordinator.swift */; };
 		58B61054FB08F6E1D93FF093 /* RegionalStationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85ED1CDCDE77EC8D69C9FC22 /* RegionalStationListView.swift */; };
@@ -165,6 +166,7 @@
 		E7559358126A5FF66C30B04E /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		EA2B5564F6D09EA284A8E4C7 /* WeatherWarningSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWarningSnapshotTests.swift; sourceTree = "<group>"; };
 		EDE94826533E7D0F5C49E755 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		F0BC59108267C0DA26AB688A /* AdaptiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLayout.swift; sourceTree = "<group>"; };
 		F12C672A68B5E648C116F153 /* NineDayForecastChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineDayForecastChart.swift; sourceTree = "<group>"; };
 		F2B6F4A8F7DF905D3EBAFAFB /* RegionalWeatherBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalWeatherBottomSheetView.swift; sourceTree = "<group>"; };
 		F397EC220B905448C67192A1 /* AppSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsTests.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 		F9D7172EC2D34456D74D5D5E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F0BC59108267C0DA26AB688A /* AdaptiveLayout.swift */,
 				998D5C9B7E2E385D1DE27309 /* BannerDetailView.swift */,
 				65A4950F0E4A1527B55EB511 /* FavoriteStationsView.swift */,
 				EDE94826533E7D0F5C49E755 /* HomeView.swift */,
@@ -517,6 +520,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44150B7705D01CD19699F7D6 /* AdaptiveLayout.swift in Sources */,
 				DD429B0995BBCD640E14C7CF /* AppSettings.swift in Sources */,
 				F5232812BFBC5636254738B4 /* BannerDetailView.swift in Sources */,
 				1CCC157F7137D03BA3435163 /* ContentView.swift in Sources */,

@@ -49,8 +49,9 @@ struct FavoriteStationsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button { isAdding = true } label: { Image(systemName: "plus") }
-                    .accessibilityLabel(settings.text("favorites_add"))
+                Button { isAdding = true } label: {
+                    Label(settings.text("favorites_add"), systemImage: "plus")
+                }
             }
             if !favorites.isEmpty {
                 ToolbarItem(placement: .topBarLeading) { EditButton() }

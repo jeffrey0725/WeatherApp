@@ -46,6 +46,26 @@ class WeatherUITestCase: XCTestCase {
         return total / Double(width * height)
     }
 
+    /// iOS 27 moves navigation controls into a side toolbar on the iPhone Duo's open display,
+    /// where the back button is no longer inside the navigation bar.
+    func goBack(_ app: XCUIApplication) {
+        let sideButton = app.buttons["BackButton"]
+        if sideButton.exists { sideButton.tap(); return }
+        app.navigationBars.buttons.firstMatch.tap()
+    }
+
+    /// Some simulators (the iPhone Duo on a headless Mac) return all-black screenshots, which
+    /// makes brightness checks meaningless, so those tests skip instead of failing.
+    func requireReadableScreenshots(_ app: XCUIApplication) throws {
+        try XCTSkipIf(brightness(of: app) < 0.001, "This simulator renders blank screenshots")
+    }
+
+    /// The Map/List picker only exists on narrow windows; wide windows show both at once.
+    func selectDisplay(_ app: XCUIApplication, _ title: String) {
+        let button = app.buttons[title]
+        if button.waitForExistence(timeout: 3) { button.tap() }
+    }
+
     func firstStationRow(_ app: XCUIApplication) -> XCUIElement {
         app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "°C")).firstMatch
     }
@@ -101,7 +121,7 @@ final class SettingsUITests: WeatherUITestCase {
         app.buttons["Language"].tap()
         app.buttons["繁體中文"].tap()
         XCTAssertTrue(app.navigationBars["設定"].waitForExistence(timeout: 5))
-        app.navigationBars.buttons.firstMatch.tap() // Back from the picker, if shown.
+        goBack(app) // Back from the picker, if shown.
         if app.buttons["完成"].waitForExistence(timeout: 3) { app.buttons["完成"].tap() }
         XCTAssertTrue(app.navigationBars["今日天氣"].waitForExistence(timeout: 10))
     }
@@ -135,7 +155,7 @@ final class RegionalExplorerUITests: WeatherUITestCase {
         openWeatherLink(app, "Weather around Hong Kong")
         XCTAssertTrue(app.navigationBars["Regional weather"].waitForExistence(timeout: 10))
 
-        app.buttons["List"].tap()
+        selectDisplay(app, "List")
         let row = firstStationRow(app)
         XCTAssertTrue(row.waitForExistence(timeout: networkTimeout), "Station rows should load")
         row.tap()
@@ -171,10 +191,10 @@ final class RainfallUITests: WeatherUITestCase {
         let matching = NSPredicate(format: "label BEGINSWITH %@", "Matching stations")
         XCTAssertTrue(app.staticTexts.containing(matching).firstMatch.waitForExistence(timeout: networkTimeout))
 
-        app.buttons["Map"].tap()
+        selectDisplay(app, "Map")
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", "Tap a station")).firstMatch
             .waitForExistence(timeout: 5), "Map mode should show its help text")
-        app.buttons["List"].tap()
+        selectDisplay(app, "List")
         XCTAssertTrue(app.staticTexts["Station ranking"].waitForExistence(timeout: 5))
 
         let rows = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "mm"))
@@ -190,6 +210,7 @@ final class AppearanceUITests: WeatherUITestCase {
     func testForcedDarkAndLightAppearancesOverrideTheSystem() throws {
         let dark = launchApp(appearance: "dark")
         XCTAssertTrue(dark.staticTexts["Current weather"].waitForExistence(timeout: networkTimeout))
+        try requireReadableScreenshots(dark)
         XCTAssertLessThan(brightness(of: dark), 0.35, "Dark appearance should render a dark screen")
         dark.terminate()
 
@@ -201,6 +222,7 @@ final class AppearanceUITests: WeatherUITestCase {
     func testSwitchingAppearanceInSettingsUpdatesTheAppAndSheet() throws {
         let app = launchApp(appearance: "light")
         XCTAssertTrue(app.navigationBars["Today"].waitForExistence(timeout: 15))
+        try requireReadableScreenshots(app)
         XCTAssertGreaterThan(brightness(of: app), 0.6)
         app.buttons["Settings"].tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
@@ -217,6 +239,7 @@ final class AppearanceUITests: WeatherUITestCase {
     func testFollowDeviceMatchesSystemAppearance() throws {
         let app = launchApp(appearance: "system")
         XCTAssertTrue(app.staticTexts["Current weather"].waitForExistence(timeout: networkTimeout))
+        try requireReadableScreenshots(app)
         let systemIsDark = UIScreen.main.traitCollection.userInterfaceStyle == .dark
         let value = brightness(of: app)
         if systemIsDark { XCTAssertLessThan(value, 0.35, "Follow device should be dark under a dark system") }
@@ -228,6 +251,7 @@ final class AppearanceUITests: WeatherUITestCase {
         let systemIsDark = UIScreen.main.traitCollection.userInterfaceStyle == .dark
         let app = launchApp(appearance: systemIsDark ? "light" : "dark") // Opposite of the system.
         XCTAssertTrue(app.navigationBars["Today"].waitForExistence(timeout: 15))
+        try requireReadableScreenshots(app)
         app.buttons["Settings"].tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
         app.buttons["Follow device"].tap()
@@ -240,5 +264,72 @@ final class AppearanceUITests: WeatherUITestCase {
         let page = brightness(of: app)
         if systemIsDark { XCTAssertLessThan(page, 0.35) }
         else { XCTAssertGreaterThan(page, 0.6) }
+    }
+}
+
+/// Layout checks that depend on the window's width, not on a device name, so they hold for
+/// iPhone, iPad, Split View and the iPhone Duo (open or folded).
+final class AdaptiveLayoutUITests: WeatherUITestCase {
+    private func windowWidth(_ app: XCUIApplication) -> CGFloat { app.windows.firstMatch.frame.width }
+
+    private func assertNoHorizontalOverflow(_ app: XCUIApplication, _ screen: String,
+                                            file: StaticString = #filePath, line: UInt = #line) {
+        let window = app.windows.firstMatch.frame
+        var offenders: [String] = []
+        for text in app.staticTexts.allElementsBoundByIndex where text.exists && text.frame.width > 0 {
+            let frame = text.frame
+            if frame.minX < window.minX - 1 || frame.maxX > window.maxX + 1 {
+                offenders.append("\(text.label) \(frame)")
+            }
+        }
+        XCTAssertTrue(offenders.isEmpty, "\(screen): text outside the \(window.width)pt window: \(offenders.prefix(3))",
+                      file: file, line: line)
+    }
+
+    func testMainScreensStayWithinTheWindowWidth() throws {
+        let app = launchApp()
+        XCTAssertTrue(app.staticTexts["Current weather"].waitForExistence(timeout: networkTimeout))
+        assertNoHorizontalOverflow(app, "Today")
+
+        openWeatherLink(app, "Weather around Hong Kong")
+        XCTAssertTrue(app.navigationBars["Regional weather"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", "Stations shown"))
+            .firstMatch.waitForExistence(timeout: networkTimeout))
+        assertNoHorizontalOverflow(app, "Regional weather")
+        goBack(app)
+
+        openWeatherLink(app, "Past-hour rainfall")
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", "Matching stations"))
+            .firstMatch.waitForExistence(timeout: networkTimeout))
+        assertNoHorizontalOverflow(app, "Rainfall")
+    }
+
+    /// The side-by-side layout is chosen by the horizontal size class plus the content width, so the
+    /// test reads the layout the app reports and checks that the controls agree with it.
+    func testMapAndListFollowTheReportedLayout() throws {
+        let app = launchApp()
+        let width = windowWidth(app)
+        XCTAssertTrue(app.staticTexts["Current weather"].waitForExistence(timeout: networkTimeout))
+        let todayWide = app.otherElements["layout.sideBySide"].exists
+        let todaySingle = app.otherElements["layout.single"].exists
+        XCTAssertTrue(todayWide != todaySingle, "Today should report exactly one layout")
+
+        openWeatherLink(app, "Weather around Hong Kong")
+        XCTAssertTrue(app.navigationBars["Regional weather"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", "Stations shown"))
+            .firstMatch.waitForExistence(timeout: networkTimeout))
+        let wide = app.otherElements["layout.sideBySide"].waitForExistence(timeout: 5)
+        let single = app.otherElements["layout.single"].exists
+        XCTAssertTrue(wide != single, "The explorer should report exactly one layout")
+        add(XCTAttachment(string: "window \(width)pt, explorer layout: \(wide ? "sideBySide" : "single")"))
+
+        if wide {
+            XCTAssertFalse(app.buttons["List"].exists, "Side by side needs no Map/List picker")
+            XCTAssertTrue(firstStationRow(app).waitForExistence(timeout: 10), "The list should sit beside the map")
+        } else {
+            XCTAssertTrue(app.buttons["List"].waitForExistence(timeout: 5), "A single column keeps the Map/List picker")
+        }
+        if width >= 900 { XCTAssertTrue(wide, "A \(width)pt window should be side by side") }
+        if width <= 500 { XCTAssertTrue(single, "A \(width)pt window should be a single column") }
     }
 }

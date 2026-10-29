@@ -43,7 +43,7 @@ struct DashboardFavoriteStationsView: View {
                         }
                         .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(.tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
+                        .background(Color.groupedCardInset, in: RoundedRectangle(cornerRadius: 12))
                     }
                     .buttonStyle(.plain)
                 }
@@ -55,7 +55,7 @@ struct DashboardFavoriteStationsView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
+        .background(Color.groupedCard, in: RoundedRectangle(cornerRadius: 20))
     }
 }
 

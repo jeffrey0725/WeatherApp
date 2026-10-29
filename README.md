@@ -1,6 +1,6 @@
 # WeatherApp
 
-Last updated: 2026-10-19 09:32:03 HKT (UTC+08:00)
+Last updated: 2026-10-30 02:13:45 HKT (UTC+08:00)
 
 A native iOS app for Hong Kong weather, built with SwiftUI and Hong Kong Observatory (HKO) open data. The current deployment target is iOS 17.6 and the project uses Swift 5 language mode.
 
@@ -24,6 +24,7 @@ A native iOS app for Hong Kong weather, built with SwiftUI and Hong Kong Observa
 - Favorite stations with custom labels, ordering, deletion, and local SwiftData persistence.
 - Follow-device, English, and Traditional Chinese language settings.
 - Celsius/Fahrenheit preferences for numeric temperature readings and ranges.
+- Adaptive layouts for regular-width windows (iPad, wide Split View panes and the iPhone Duo's inner display): Today in two columns, and the regional explorer and rainfall screens with the map beside the list. Compact windows, including the Duo's closed outer display, keep the single-column layout.
 - Appearance preference in Settings: follow the device's light/dark setting, or force Light or Dark.
 - Pull-to-refresh, loading states, retry actions, and localized network errors.
 - Previous warning reports are labeled explicitly when a refresh fails; an unavailable current status is not presented as an all-clear result.
@@ -75,7 +76,7 @@ The script runs the service, model, favorites, and settings tests in a standalon
 
 Some execution sandboxes require approval for Xcode's SwiftData compiler plugin. The script does not launch Xcode or a simulator. A complete Xcode build and device UI checks are separate validation steps.
 
-The latest validation on **2026-10-19, Hong Kong time**, reported **182 passing tests and passing iOS source typechecks** (180 on 2026-10-18, plus 2 appearance-setting tests), and the simulator UI tests passed. The earlier rainfall work added 11 rainfall-map regressions. All 36 rainfall coordinates and API ID/name matches were checked against the official spatial dataset and live English feed. XcodeGen was rerun and the generated targets include all 47 app, 10 unit-test, and 2 UI-test Swift sources, with localized resources in both app and unit-test targets. A normal iOS Xcode test run and device UI verification remain pending. See [validation details and limitations](docs/STATUS.md#validation-record).
+The latest validation on **2026-10-30, Hong Kong time**, reported **184 passing tests and passing iOS source typechecks** (180 on 2026-10-18, plus 2 appearance-setting and 2 rainfall-marker tests), and the simulator UI tests passed on the iPhone 17 and the closed iPhone Duo simulators. The earlier rainfall work added 11 rainfall-map regressions. All 36 rainfall coordinates and API ID/name matches were checked against the official spatial dataset and live English feed. XcodeGen was rerun and the generated targets include all 47 app, 10 unit-test, and 2 UI-test Swift sources, with localized resources in both app and unit-test targets. A normal iOS Xcode test run and device UI verification remain pending. See [validation details and limitations](docs/STATUS.md#validation-record).
 
 ## Run the simulator UI tests
 
@@ -87,7 +88,7 @@ xcodebuild test -project WeatherApp.xcodeproj -scheme WeatherApp \
   -only-testing:WeatherAppUITests CODE_SIGNING_ALLOWED=NO
 ```
 
-They last passed on 2026-10-18 (iPhone 16 simulator, iOS 18.1). See [STATUS.md](docs/STATUS.md#open-issues) for what they do and do not cover.
+They last passed on 2026-10-23 on the iPhone 17 (iOS 26.2), iPad Pro 13-inch (iOS 27.0) and iPhone Duo (iOS 27.1) simulators; four pixel-reading appearance tests skip on the Duo, whose simulator returns blank screenshots here. See [STATUS.md](docs/STATUS.md#open-issues) for what they do and do not cover.
 
 ## Data and persistence
 

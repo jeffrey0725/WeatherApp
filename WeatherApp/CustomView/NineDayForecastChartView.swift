@@ -45,7 +45,7 @@ struct NineDayForecastChartView: View {
                                 }
                                 .padding(10)
                                 .frame(minWidth: 64, minHeight: 44)
-                                .background(selected?.id == day.id ? Color.accentColor.opacity(0.15) : Color(.tertiarySystemBackground),
+                                .background(selected?.id == day.id ? Color.accentColor.opacity(0.15) : Color.groupedCardInset,
                                             in: RoundedRectangle(cornerRadius: 12))
                             }
                             .buttonStyle(.plain)

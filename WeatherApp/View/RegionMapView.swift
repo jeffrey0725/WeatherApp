@@ -76,7 +76,6 @@ struct RegionMapView: View {
                 }
             }
         }
-        .frame(height: 500)
         .onChange(of: annotations.map(\.id)) { _, identifiers in
             position = identifiers.isEmpty ? .region(Self.initialRegion) : .automatic
         }
