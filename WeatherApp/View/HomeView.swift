@@ -26,6 +26,9 @@ struct HomeView: View {
                     shortcut(icon: "cloud.rain.fill", title: "rainfall_title", subtitle: "rainfall_shortcut_description") {
                         HourlyRainfallView()
                     }
+                    shortcut(icon: "moon.stars.fill", title: "moon_tides_title", subtitle: "moon_tides_shortcut_description") {
+                        MoonTidesView()
+                    }
                 } trailing: {
                     DashboardSolarTimesView(viewModel: solarTimes, isRefreshing: isRefreshing, retry: retry)
                     WeatherDashboardSectionView(title: "local_weather_title", section: viewModel.local, isRefreshing: viewModel.isLoading, retry: retry) { forecast in
@@ -101,6 +104,7 @@ struct HomeView: View {
                 NavigationLink(settings.text("nine_weather_title")) { NineDayWeatherInfoView() }
                 NavigationLink(settings.text("region_weather_title")) { RegionWeatherInfoView() }
                 NavigationLink(settings.text("rainfall_title")) { HourlyRainfallView() }
+                NavigationLink(settings.text("moon_tides_title")) { MoonTidesView() }
                 NavigationLink(settings.text("weather_warnings_title")) { WeatherWarningsView() }
             }
             .navigationTitle(settings.text("weather_browse_reports"))

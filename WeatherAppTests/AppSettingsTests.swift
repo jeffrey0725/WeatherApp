@@ -72,6 +72,21 @@ final class AppSettingsTests: XCTestCase {
         }
     }
 
+    func testTideStationDefaultsToQuarryBayIsRestoredAndRejectsUnknownCodes() {
+        onMainActor {
+            let storage = MemorySettingsStorage()
+            let first = AppSettings(storage: storage)
+            XCTAssertEqual(first.tideStationID, "QUB")
+            XCTAssertEqual(first.tideStation.english, "Quarry Bay")
+            XCTAssertNil(storage.values[AppSettings.tideStationKey], "Nothing is stored until the user chooses")
+            first.tideStationID = "CCH"
+            XCTAssertEqual(AppSettings(storage: storage).tideStationID, "CCH")
+            XCTAssertEqual(AppSettings(storage: storage).tideStation.english, "Cheung Chau")
+            storage.values[AppSettings.tideStationKey] = "ZZZ"
+            XCTAssertEqual(AppSettings(storage: storage).tideStationID, "QUB")
+        }
+    }
+
     func testAppLanguageOverridesBundleStringsAndFormattingWithoutChangingAPIUnits() {
         onMainActor {
             let settings = AppSettings(storage: MemorySettingsStorage(), localizationBundle: Bundle(for: Self.self))

@@ -48,6 +48,7 @@ targets:
         ENABLE_PREVIEWS: true
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_FILE: WeatherApp/Info.plist
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: Find the nearest Hong Kong weather station with an available temperature reading when you tap Near me.
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: true
         INFOPLIST_KEY_UILaunchScreen_Generation: true

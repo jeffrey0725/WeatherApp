@@ -79,6 +79,7 @@ final class AppSettings: ObservableObject {
     static let languageKey = "weather.settings.language"
     static let temperatureUnitKey = "weather.settings.temperatureUnit"
     static let appearanceKey = "weather.settings.appearance"
+    static let tideStationKey = "weather.settings.tideStation"
 
     @Published var language: AppLanguage {
         didSet { storage.write(language.rawValue, forKey: Self.languageKey) }
@@ -91,6 +92,11 @@ final class AppSettings: ObservableObject {
         didSet { storage.write(appearance.rawValue, forKey: Self.appearanceKey) }
     }
 
+    /// The tide station chosen on the Moon & tides screen, always a `TideStationCatalog` code.
+    @Published var tideStationID: String {
+        didSet { storage.write(tideStationID, forKey: Self.tideStationKey) }
+    }
+
     private let storage: any SettingsStorage
     private let localizationBundle: Bundle
 
@@ -100,10 +106,15 @@ final class AppSettings: ObservableObject {
         language = storage.read(Self.languageKey).flatMap(AppLanguage.init(rawValue:)) ?? .system
         temperatureUnit = storage.read(Self.temperatureUnitKey).flatMap(TemperatureUnit.init(rawValue:)) ?? .celsius
         appearance = storage.read(Self.appearanceKey).flatMap(AppAppearance.init(rawValue:)) ?? .system
+        tideStationID = storage.read(Self.tideStationKey).flatMap { TideStationCatalog.station(withID: $0)?.id }
+            ?? TideStationCatalog.defaultStationID
     }
 
     var locale: Locale { language.locale }
     var apiLanguageCode: String { language.apiCode }
+    var tideStation: TideStation {
+        TideStationCatalog.station(withID: tideStationID) ?? TideStationCatalog.defaultStation
+    }
 
     func text(_ key: String) -> String { AppLocalization.text(key, locale: locale, bundle: localizationBundle) }
     func timestamp(_ text: String?) -> String? { WeatherFormatting.timestamp(text, locale: locale) }

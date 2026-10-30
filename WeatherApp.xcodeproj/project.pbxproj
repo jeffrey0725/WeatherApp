@@ -9,10 +9,12 @@
 /* Begin PBXBuildFile section */
 		05A70E10E440E5E28DC97B42 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F79CB929C5FE40173263193 /* SettingView.swift */; };
 		08EB799E1612EB97ED393D37 /* Static.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F22EC2689C250AD1BE19F4 /* Static.swift */; };
+		0CAF8BB061D4520E6D3BC14F /* MoonTidesCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AEB84F9D930744FA228AF4 /* MoonTidesCards.swift */; };
 		0EB357E25C90D0A29D61ABC7 /* RegionalWeatherExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AFEACC31B77B289A3163B4 /* RegionalWeatherExplorer.swift */; };
 		106AC0930315A8CE063F1D19 /* HourlyRainfallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A92557BBFCE6A645E09A1 /* HourlyRainfallTests.swift */; };
 		14290FA68A6D3D5013BA0826 /* RainfallMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF14DA6712662D61B694D636 /* RainfallMapView.swift */; };
 		14AB03DED17E7CA3C52DC5A1 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE94826533E7D0F5C49E755 /* HomeView.swift */; };
+		14B934CBB1C0EA5301C2AA19 /* TideStationCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B5484F2BA1DD36A3AEE9B /* TideStationCatalog.swift */; };
 		16ABE41C5EF3E6075A3C82A1 /* NineDayForecastChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7F2428157276B7A8003210 /* NineDayForecastChartView.swift */; };
 		176678E28DF847DC187A9142 /* WeatherWarningSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76F01BCF4CD5AAD9CEF2352 /* WeatherWarningSnapshot.swift */; };
 		1CCC157F7137D03BA3435163 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B97555344CE3E99906899B2 /* ContentView.swift */; };
@@ -29,19 +31,23 @@
 		44150B7705D01CD19699F7D6 /* AdaptiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BC59108267C0DA26AB688A /* AdaptiveLayout.swift */; };
 		4688D0F27DFB9439B9A1EAEA /* RainfallStationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8FCB5EE9E4013F042B2AD2 /* RainfallStationSheet.swift */; };
 		4C6317133B0A590573B79471 /* WeatherRequestCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25D31E7E716BC77E963E01D /* WeatherRequestCoordinator.swift */; };
+		4F6D08B3E52C6A309FD73B17 /* MoonTidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E767A57BD6C58CDA75A0B1A4 /* MoonTidesView.swift */; };
 		58B61054FB08F6E1D93FF093 /* RegionalStationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85ED1CDCDE77EC8D69C9FC22 /* RegionalStationListView.swift */; };
 		605ECA054AE957E347CDE148 /* FavoriteStationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39DBF0FCE4825F36E41C6366 /* FavoriteStationStore.swift */; };
 		633A5F5FFE9493061849ECC6 /* NineDayForecastChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7FEFF4977CBDAA4B1B95E5 /* NineDayForecastChartTests.swift */; };
 		64733B368221B53DD125037F /* HourlyRainfallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603F4BB26FFF00AE7F382B55 /* HourlyRainfallView.swift */; };
+		658C2014E438D6CDF7AF009B /* HKOOpenDataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6603336B1A3DB2A9A9E3660C /* HKOOpenDataTable.swift */; };
 		65AF3D1831FC952B21E6D71B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A23E7EE471796233C2483C1E /* Localizable.strings */; };
 		687F7B33EA3D74C35E747ADA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DFE43220ED22993B9780F5 /* Utils.swift */; };
 		7242A7F977B2E9D1E6FD5863 /* DailyWeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8631CA3374AB5247BE22658 /* DailyWeatherDetailView.swift */; };
+		77DDABE56869068B5A7810B9 /* MoonTidesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD392A6488170B30BCF8BF3E /* MoonTidesViewModel.swift */; };
 		7B0F6FB254B5AAEFE2826668 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 33F1735B0F49CA05D780A00F /* PrivacyInfo.xcprivacy */; };
 		7F3F24380FC1F7A14DAB6592 /* RegionMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA61B59A478DC5C319D7BF8 /* RegionMapView.swift */; };
 		84ACD50B53819A2840EE4303 /* WeatherStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501BCCDD25FA2CDB3C115552 /* WeatherStatusView.swift */; };
 		9699DC24E31A575DCBF7CAD6 /* RainfallMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BACFFFC670D39BBA66CB61 /* RainfallMap.swift */; };
 		9AEE630BEABA898670321559 /* NineDayForecastChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C672A68B5E648C116F153 /* NineDayForecastChart.swift */; };
 		9B0C56631D36532BC81F8D61 /* WeatherWarningsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A268C166D8269A967BB1D47 /* WeatherWarningsView.swift */; };
+		9CCA22BB41F11573439E86CC /* MoonTidesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2F1ED65369BE1B6C92CDAD /* MoonTidesTests.swift */; };
 		A158EDE875E8DFFC41E98D86 /* WeatherDashboardCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D3FF3547458E98262704E6 /* WeatherDashboardCards.swift */; };
 		A2B91442BA52767E892C1A95 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E76694129C73A7A3EE70A6 /* WeatherModel.swift */; };
 		A6659374A77468EB90BFC210 /* RegionalWeatherExplorerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2749D569EC0D073C575E0ED5 /* RegionalWeatherExplorerTests.swift */; };
@@ -67,8 +73,10 @@
 		E86AF4025C2BF6E3E2727B11 /* WeatherAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5950F672248A699E3E7383A2 /* WeatherAppTests.swift */; };
 		E8FFBAC64593E11A0C5E92EE /* HourlyRainfall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210E3C18C3F43CCC3ED7C836 /* HourlyRainfall.swift */; };
 		EA3EE83AFA1220772D725952 /* RegionalWeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D83B467FD6E899DDF3AF5E0 /* RegionalWeatherDetailView.swift */; };
+		EDEC325186B8F05AEA77DA73 /* TideTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B380DEAA5A24E2E73F7B447 /* TideTimes.swift */; };
 		F0A2250FAFB009F7539FD770 /* DashboardFavoriteStationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B402289B0DBDAE0F5423743 /* DashboardFavoriteStationsView.swift */; };
 		F26FF87D786AFB1B016FE937 /* LocalWeatherInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606C5476FB4B9805D46A134 /* LocalWeatherInfoView.swift */; };
+		F3C6763D2601D9DF5E649456 /* MoonTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBF8B41934774661D728441 /* MoonTimes.swift */; };
 		F469D79410A9ED4E69451E31 /* FavoriteStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E61D3118D0777255CCF150E /* FavoriteStation.swift */; };
 		F46DCD35C325242B7AD9B836 /* RollingBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897BE9FCF76D935A05A1D67E /* RollingBannerView.swift */; };
 		F5232812BFBC5636254738B4 /* BannerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998D5C9B7E2E385D1DE27309 /* BannerDetailView.swift */; };
@@ -101,11 +109,14 @@
 		210E3C18C3F43CCC3ED7C836 /* HourlyRainfall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyRainfall.swift; sourceTree = "<group>"; };
 		25BC59F755991BBB3351FCD6 /* WeatherApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2749D569EC0D073C575E0ED5 /* RegionalWeatherExplorerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalWeatherExplorerTests.swift; sourceTree = "<group>"; };
+		2D2F1ED65369BE1B6C92CDAD /* MoonTidesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonTidesTests.swift; sourceTree = "<group>"; };
 		2FC3B133EDDC463018930CB7 /* RAINFALL_STATIONS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RAINFALL_STATIONS.md; sourceTree = "<group>"; };
 		31F22EC2689C250AD1BE19F4 /* Static.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Static.swift; sourceTree = "<group>"; };
 		33F1735B0F49CA05D780A00F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		38AEB84F9D930744FA228AF4 /* MoonTidesCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonTidesCards.swift; sourceTree = "<group>"; };
 		3990088E33BFCDACA5B7D57E /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		39DBF0FCE4825F36E41C6366 /* FavoriteStationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStationStore.swift; sourceTree = "<group>"; };
+		3B380DEAA5A24E2E73F7B447 /* TideTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TideTimes.swift; sourceTree = "<group>"; };
 		3B90198EC66D94E2EDAE37D5 /* DashboardSolarTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSolarTimesView.swift; sourceTree = "<group>"; };
 		402CF286D9E5DFA71045A409 /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
 		48DBA0D5A6D69943544BB79A /* SolarTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarTimes.swift; sourceTree = "<group>"; };
@@ -121,6 +132,7 @@
 		603F4BB26FFF00AE7F382B55 /* HourlyRainfallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyRainfallView.swift; sourceTree = "<group>"; };
 		64E76694129C73A7A3EE70A6 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		65A4950F0E4A1527B55EB511 /* FavoriteStationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStationsView.swift; sourceTree = "<group>"; };
+		6603336B1A3DB2A9A9E3660C /* HKOOpenDataTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKOOpenDataTable.swift; sourceTree = "<group>"; };
 		665FCD1A4A311996FDFE3E5D /* NineDayWeatherInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineDayWeatherInfoView.swift; sourceTree = "<group>"; };
 		6B97555344CE3E99906899B2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6C01A3C6AE6A546A616526C4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -140,9 +152,11 @@
 		9F79CB929C5FE40173263193 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		A0B686FA37B765BD0B724A5C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A0DCD95E8BE37843C8CF84F0 /* generate-project.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "generate-project.sh"; sourceTree = "<group>"; };
+		A50B5484F2BA1DD36A3AEE9B /* TideStationCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TideStationCatalog.swift; sourceTree = "<group>"; };
 		A76201F5026C082E3F6DA4C8 /* NearbyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyWeatherView.swift; sourceTree = "<group>"; };
 		AB386EF2F753911952C0D1C5 /* HANDOVER.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = HANDOVER.md; sourceTree = "<group>"; };
 		AC929FE26989FFFA74D9AD67 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		ACBF8B41934774661D728441 /* MoonTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonTimes.swift; sourceTree = "<group>"; };
 		AF8E1F51A0EF9242FF7129C2 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		B1795C24D2675BBD8F85BC46 /* NearbyWeatherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyWeatherTests.swift; sourceTree = "<group>"; };
 		B25D31E7E716BC77E963E01D /* WeatherRequestCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRequestCoordinator.swift; sourceTree = "<group>"; };
@@ -156,6 +170,7 @@
 		C7DD48C872DB4D45B412A7A9 /* FavoriteStationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStationTests.swift; sourceTree = "<group>"; };
 		C84DA37A624AD5FD706CFDA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CBA61B59A478DC5C319D7BF8 /* RegionMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionMapView.swift; sourceTree = "<group>"; };
+		CD392A6488170B30BCF8BF3E /* MoonTidesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonTidesViewModel.swift; sourceTree = "<group>"; };
 		CE4CEE60736900B36952FB32 /* SolarTimesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarTimesTests.swift; sourceTree = "<group>"; };
 		CF14DA6712662D61B694D636 /* RainfallMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainfallMapView.swift; sourceTree = "<group>"; };
 		D55BD36DC14CED33A9C838F8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -164,6 +179,7 @@
 		E606C5476FB4B9805D46A134 /* LocalWeatherInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWeatherInfoView.swift; sourceTree = "<group>"; };
 		E6CCDD89A0AB717D13232375 /* WeatherAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WeatherAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7559358126A5FF66C30B04E /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
+		E767A57BD6C58CDA75A0B1A4 /* MoonTidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonTidesView.swift; sourceTree = "<group>"; };
 		EA2B5564F6D09EA284A8E4C7 /* WeatherWarningSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWarningSnapshotTests.swift; sourceTree = "<group>"; };
 		EDE94826533E7D0F5C49E755 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		F0BC59108267C0DA26AB688A /* AdaptiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLayout.swift; sourceTree = "<group>"; };
@@ -181,12 +197,15 @@
 			children = (
 				DF9B511CCD73C6AF385891D8 /* AppSettings.swift */,
 				4E61D3118D0777255CCF150E /* FavoriteStation.swift */,
+				6603336B1A3DB2A9A9E3660C /* HKOOpenDataTable.swift */,
 				210E3C18C3F43CCC3ED7C836 /* HourlyRainfall.swift */,
+				ACBF8B41934774661D728441 /* MoonTimes.swift */,
 				C79B67D176528B311E08E516 /* NearbyWeather.swift */,
 				F12C672A68B5E648C116F153 /* NineDayForecastChart.swift */,
 				52BACFFFC670D39BBA66CB61 /* RainfallMap.swift */,
 				52AFEACC31B77B289A3163B4 /* RegionalWeatherExplorer.swift */,
 				48DBA0D5A6D69943544BB79A /* SolarTimes.swift */,
+				3B380DEAA5A24E2E73F7B447 /* TideTimes.swift */,
 				64E76694129C73A7A3EE70A6 /* WeatherModel.swift */,
 				C76F01BCF4CD5AAD9CEF2352 /* WeatherWarningSnapshot.swift */,
 			);
@@ -208,6 +227,7 @@
 				F397EC220B905448C67192A1 /* AppSettingsTests.swift */,
 				C7DD48C872DB4D45B412A7A9 /* FavoriteStationTests.swift */,
 				088A92557BBFCE6A645E09A1 /* HourlyRainfallTests.swift */,
+				2D2F1ED65369BE1B6C92CDAD /* MoonTidesTests.swift */,
 				B1795C24D2675BBD8F85BC46 /* NearbyWeatherTests.swift */,
 				FC7FEFF4977CBDAA4B1B95E5 /* NineDayForecastChartTests.swift */,
 				F823664034AE6B53B301F234 /* RainfallMapTests.swift */,
@@ -323,6 +343,7 @@
 			isa = PBXGroup;
 			children = (
 				BE17D156051B2B371D6E8AFE /* HourlyRainfallViewModel.swift */,
+				CD392A6488170B30BCF8BF3E /* MoonTidesViewModel.swift */,
 				50BB9BD237B480C5F70CE7CC /* SolarTimesViewModel.swift */,
 				07E44619976FE6C323DE1C75 /* WeatherDashboardViewModel.swift */,
 				E7559358126A5FF66C30B04E /* WeatherViewModel.swift */,
@@ -335,6 +356,7 @@
 			children = (
 				4985916526B88D45F3ACB781 /* RainfallStationCatalog.swift */,
 				31F22EC2689C250AD1BE19F4 /* Static.swift */,
+				A50B5484F2BA1DD36A3AEE9B /* TideStationCatalog.swift */,
 			);
 			path = StaticFile;
 			sourceTree = "<group>";
@@ -355,6 +377,7 @@
 				D8631CA3374AB5247BE22658 /* DailyWeatherDetailView.swift */,
 				7B402289B0DBDAE0F5423743 /* DashboardFavoriteStationsView.swift */,
 				3B90198EC66D94E2EDAE37D5 /* DashboardSolarTimesView.swift */,
+				38AEB84F9D930744FA228AF4 /* MoonTidesCards.swift */,
 				A76201F5026C082E3F6DA4C8 /* NearbyWeatherView.swift */,
 				9C7F2428157276B7A8003210 /* NineDayForecastChartView.swift */,
 				CF14DA6712662D61B694D636 /* RainfallMapView.swift */,
@@ -375,6 +398,7 @@
 				EDE94826533E7D0F5C49E755 /* HomeView.swift */,
 				603F4BB26FFF00AE7F382B55 /* HourlyRainfallView.swift */,
 				E606C5476FB4B9805D46A134 /* LocalWeatherInfoView.swift */,
+				E767A57BD6C58CDA75A0B1A4 /* MoonTidesView.swift */,
 				665FCD1A4A311996FDFE3E5D /* NineDayWeatherInfoView.swift */,
 				9800F43B960C7F46DD8B176A /* RegionalWeatherExplorerView.swift */,
 				CBA61B59A478DC5C319D7BF8 /* RegionMapView.swift */,
@@ -530,12 +554,17 @@
 				F469D79410A9ED4E69451E31 /* FavoriteStation.swift in Sources */,
 				605ECA054AE957E347CDE148 /* FavoriteStationStore.swift in Sources */,
 				2E3DC3A0663E455EE0E6C3E6 /* FavoriteStationsView.swift in Sources */,
+				658C2014E438D6CDF7AF009B /* HKOOpenDataTable.swift in Sources */,
 				14AB03DED17E7CA3C52DC5A1 /* HomeView.swift in Sources */,
 				E8FFBAC64593E11A0C5E92EE /* HourlyRainfall.swift in Sources */,
 				64733B368221B53DD125037F /* HourlyRainfallView.swift in Sources */,
 				E83392D2DE65B7C3E84C19A2 /* HourlyRainfallViewModel.swift in Sources */,
 				F26FF87D786AFB1B016FE937 /* LocalWeatherInfoView.swift in Sources */,
 				1D056D1DAA28D18FB2DC1E7D /* LocationManager.swift in Sources */,
+				0CAF8BB061D4520E6D3BC14F /* MoonTidesCards.swift in Sources */,
+				4F6D08B3E52C6A309FD73B17 /* MoonTidesView.swift in Sources */,
+				77DDABE56869068B5A7810B9 /* MoonTidesViewModel.swift in Sources */,
+				F3C6763D2601D9DF5E649456 /* MoonTimes.swift in Sources */,
 				BC5AC13D2A6B8C1CC13994A3 /* NearbyWeather.swift in Sources */,
 				255F14E6C3DB938DBC7538F0 /* NearbyWeatherView.swift in Sources */,
 				9AEE630BEABA898670321559 /* NineDayForecastChart.swift in Sources */,
@@ -557,6 +586,8 @@
 				A7D3A96956DE6D84307575A8 /* SolarTimes.swift in Sources */,
 				B381851DB2420A401E4748F1 /* SolarTimesViewModel.swift in Sources */,
 				08EB799E1612EB97ED393D37 /* Static.swift in Sources */,
+				14B934CBB1C0EA5301C2AA19 /* TideStationCatalog.swift in Sources */,
+				EDEC325186B8F05AEA77DA73 /* TideTimes.swift in Sources */,
 				687F7B33EA3D74C35E747ADA /* Utils.swift in Sources */,
 				AF406FCFB115EA3BF29B4DDA /* WeatherAppApp.swift in Sources */,
 				A158EDE875E8DFFC41E98D86 /* WeatherDashboardCards.swift in Sources */,
@@ -578,6 +609,7 @@
 				E30333C6818009018C6DF5D4 /* AppSettingsTests.swift in Sources */,
 				ABBEB3FD9B656DD6C3DAC603 /* FavoriteStationTests.swift in Sources */,
 				106AC0930315A8CE063F1D19 /* HourlyRainfallTests.swift in Sources */,
+				9CCA22BB41F11573439E86CC /* MoonTidesTests.swift in Sources */,
 				FEE49A6DC3AFCE9DF70D6EBA /* NearbyWeatherTests.swift in Sources */,
 				633A5F5FFE9493061849ECC6 /* NineDayForecastChartTests.swift in Sources */,
 				B755E77C6FB431FD66BC68C4 /* RainfallMapTests.swift in Sources */,
@@ -707,6 +739,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherApp/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Find the nearest Hong Kong weather station with an available temperature reading when you tap Near me.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -825,6 +858,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherApp/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Find the nearest Hong Kong weather station with an available temperature reading when you tap Near me.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

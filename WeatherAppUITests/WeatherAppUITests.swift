@@ -206,6 +206,47 @@ final class RainfallUITests: WeatherUITestCase {
     }
 }
 
+final class MoonTidesUITests: WeatherUITestCase {
+    func testMoonAndTidesLoadBothCardsAndSwitchStation() throws {
+        let app = launchApp()
+        openWeatherLink(app, "Moon & tides")
+        XCTAssertTrue(app.navigationBars["Moon & tides"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Moonrise & moonset"].waitForExistence(timeout: networkTimeout))
+        XCTAssertTrue(app.staticTexts["Predicted tides"].waitForExistence(timeout: networkTimeout))
+        // The tide card names the station its data is for; Quarry Bay is the default.
+        let quarryBay = app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", "Quarry Bay ·")).firstMatch
+        XCTAssertTrue(quarryBay.waitForExistence(timeout: networkTimeout))
+
+        app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "Tide station")).firstMatch.tap()
+        app.buttons["Cheung Chau"].tap()
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", "Cheung Chau ·"))
+            .firstMatch.waitForExistence(timeout: networkTimeout), "Tides should reload for the chosen station")
+        XCTAssertFalse(quarryBay.exists, "The previous station's tides must not stay on screen")
+    }
+}
+
+// TEMP-SCREENSHOTS: removed after the visual review.
+final class TempScreenshotUITests: WeatherUITestCase {
+    func testScreenshots() throws {
+        for (language, appearance, link, station) in [("en", "light", "Moon & tides", "Quarry Bay ·"),
+                                                      ("zh-Hant", "dark", "月亮與潮汐", "鰂魚涌 ·")] {
+            let app = launchApp(language: language, appearance: appearance)
+            openWeatherLink(app, link)
+            XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", station))
+                .firstMatch.waitForExistence(timeout: networkTimeout))
+            sleep(2)
+            for (index, name) in ["top", "bottom"].enumerated() {
+                if index == 1 { app.swipeUp(); sleep(1) }
+                let shot = XCTAttachment(screenshot: app.screenshot())
+                shot.name = "\(language)-\(appearance)-\(name)"
+                shot.lifetime = .keepAlways
+                add(shot)
+            }
+            app.terminate()
+        }
+    }
+}
+
 final class AppearanceUITests: WeatherUITestCase {
     func testForcedDarkAndLightAppearancesOverrideTheSystem() throws {
         let dark = launchApp(appearance: "dark")

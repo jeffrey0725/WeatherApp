@@ -10,6 +10,15 @@ mkdir -p "$build_dir/tmp" "$build_dir/mac-module-cache" "$build_dir/ios-module-c
 export TMPDIR="$build_dir/tmp/"
 export WEATHERAPP_TEST_STORE_DIRECTORY="$build_dir/persistence"
 
+# The location purpose string is a build setting, so project.yml must carry it and the checked-in project
+# must have been regenerated from it; otherwise the next regeneration silently drops the prompt text.
+for file in project.yml WeatherApp.xcodeproj/project.pbxproj; do
+    grep -q 'INFOPLIST_KEY_NSLocationWhenInUseUsageDescription' "$file" || {
+        echo "$file is missing INFOPLIST_KEY_NSLocationWhenInUseUsageDescription (edit project.yml, then run scripts/generate-project.sh)" >&2
+        exit 1
+    }
+done
+
 developer_dir="$(xcode-select -p)"
 compiler="$developer_dir/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
 mac_sdk="$developer_dir/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
@@ -49,6 +58,9 @@ PYTHON
     WeatherApp/Model/SolarTimes.swift \
     WeatherApp/Model/NineDayForecastChart.swift \
     WeatherApp/Model/NearbyWeather.swift \
+    WeatherApp/Model/HKOOpenDataTable.swift \
+    WeatherApp/Model/MoonTimes.swift \
+    WeatherApp/Model/TideTimes.swift \
     WeatherApp/Manager/LocationManager.swift \
     WeatherApp/Service/WeatherService.swift \
     WeatherApp/Service/WeatherRequestCoordinator.swift \
@@ -57,8 +69,10 @@ PYTHON
     WeatherApp/ViewModel/WeatherDashboardViewModel.swift \
     WeatherApp/ViewModel/HourlyRainfallViewModel.swift \
     WeatherApp/ViewModel/SolarTimesViewModel.swift \
+    WeatherApp/ViewModel/MoonTidesViewModel.swift \
     WeatherApp/StaticFile/Static.swift \
     WeatherApp/StaticFile/RainfallStationCatalog.swift \
+    WeatherApp/StaticFile/TideStationCatalog.swift \
     WeatherApp/Utils.swift \
     WeatherAppTests/WeatherAppTests.swift \
     WeatherAppTests/FavoriteStationTests.swift \
@@ -70,6 +84,7 @@ PYTHON
     WeatherAppTests/SolarTimesTests.swift \
     WeatherAppTests/NineDayForecastChartTests.swift \
     WeatherAppTests/NearbyWeatherTests.swift \
+    WeatherAppTests/MoonTidesTests.swift \
     -o "$test_bundle/Contents/MacOS/HKOTests"
 "$developer_dir/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/xctest" "$test_bundle"
 

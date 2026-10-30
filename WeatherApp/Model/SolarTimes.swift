@@ -41,35 +41,14 @@ struct SolarTimesResponse: Decodable {
         }
         var dates = Set<Date>()
         days = try rows.map { row in
-            guard row.count == fields.count, let key = row[dateIndex],
-                  key.range(of: #"^\d{4}-\d{2}-\d{2}$"#, options: .regularExpression) != nil else {
-                throw WeatherServiceError.invalidData
-            }
-            let parts = key.split(separator: "-").compactMap { Int($0) }
-            guard parts.count == 3,
-                  let date = SolarDay.calendar.date(from: DateComponents(year: parts[0], month: parts[1], day: parts[2])),
-                  SolarDay.calendar.component(.year, from: date) == parts[0],
-                  SolarDay.calendar.component(.month, from: date) == parts[1],
-                  SolarDay.calendar.component(.day, from: date) == parts[2],
-                  dates.insert(date).inserted else { throw WeatherServiceError.invalidData }
-            let sunrise = try Self.time(row[riseIndex], on: date)
-            let sunset = try Self.time(row[setIndex], on: date)
+            guard row.count == fields.count, let key = row[dateIndex] else { throw WeatherServiceError.invalidData }
+            let date = try HKOOpenDataTable.day(key)
+            guard dates.insert(date).inserted else { throw WeatherServiceError.invalidData }
+            let sunrise = try HKOOpenDataTable.time(row[riseIndex], on: date)
+            let sunset = try HKOOpenDataTable.time(row[setIndex], on: date)
             if let sunrise, let sunset, sunrise >= sunset { throw WeatherServiceError.invalidData }
             return SolarDay(date: date, sunrise: sunrise, sunset: sunset)
         }
-    }
-
-    private static func time(_ raw: String?, on date: Date) throws -> Date? {
-        guard let raw, !raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
-        guard raw.range(of: #"^\d{2}:\d{2}$"#, options: .regularExpression) != nil else {
-            throw WeatherServiceError.invalidData
-        }
-        let parts = raw.split(separator: ":").compactMap { Int($0) }
-        guard parts.count == 2, (0...23).contains(parts[0]), (0...59).contains(parts[1]),
-              let time = SolarDay.calendar.date(bySettingHour: parts[0], minute: parts[1], second: 0, of: date) else {
-            throw WeatherServiceError.invalidData
-        }
-        return time
     }
 }
 

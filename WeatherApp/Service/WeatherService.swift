@@ -77,19 +77,36 @@ struct WeatherService {
     }
 
     func solarTimes(on date: Date) async throws -> SolarDay {
-        let parts = SolarDay.calendar.dateComponents([.year, .month, .day], from: date)
-        let response: SolarTimesResponse = try await fetch(endpoint: "opendata.php", queryItems: [
-            URLQueryItem(name: "dataType", value: "SRS"),
-            URLQueryItem(name: "year", value: String(parts.year!)),
-            URLQueryItem(name: "month", value: String(parts.month!)),
-            URLQueryItem(name: "day", value: String(parts.day!)),
-            URLQueryItem(name: "rformat", value: "json")
-        ])
+        let response: SolarTimesResponse = try await fetch(endpoint: "opendata.php",
+                                                           queryItems: Self.dailyQuery("SRS", on: date))
         guard response.days.count == 1, let day = response.days.first,
               day.date == SolarDay.calendar.startOfDay(for: date) else {
             throw WeatherServiceError.invalidData
         }
         return day
+    }
+
+    func moonTimes(on date: Date) async throws -> MoonDay {
+        let response: MoonTimesResponse = try await fetch(endpoint: "opendata.php",
+                                                          queryItems: Self.dailyQuery("MRS", on: date))
+        guard response.days.count == 1, let day = response.days.first,
+              day.date == SolarDay.calendar.startOfDay(for: date) else {
+            throw WeatherServiceError.invalidData
+        }
+        return day
+    }
+
+    func tideTimes(at station: TideStation, on date: Date) async throws -> TideDay {
+        let response: TideTimesResponse = try await fetch(endpoint: "opendata.php", queryItems:
+            Self.dailyQuery("HLT", station: station.id, on: date))
+        let parts = SolarDay.calendar.dateComponents([.year, .month, .day], from: date)
+        // An empty tide list for a date is bad data, not a day without tides.
+        guard response.rows.count == 1, let row = response.rows.first,
+              row.month == parts.month, row.day == parts.day, !row.readings.isEmpty,
+              let year = parts.year else {
+            throw WeatherServiceError.invalidData
+        }
+        return try row.tideDay(year: year)
     }
 
     func warningReport(lang: String) async throws -> WeatherWarningReport {
@@ -98,6 +115,20 @@ struct WeatherService {
         async let tips = specialTips(lang: lang)
         // Publish a warning snapshot only when all three requests succeed.
         return try await WeatherWarningReport(summary: summary, information: information, tips: tips)
+    }
+
+    // The opendata.php tables are requested one Hong Kong date at a time and carry no language.
+    private static func dailyQuery(_ dataType: String, station: String? = nil, on date: Date) -> [URLQueryItem] {
+        let parts = SolarDay.calendar.dateComponents([.year, .month, .day], from: date)
+        var items = [URLQueryItem(name: "dataType", value: dataType)]
+        if let station { items.append(URLQueryItem(name: "station", value: station)) }
+        items += [
+            URLQueryItem(name: "year", value: String(parts.year!)),
+            URLQueryItem(name: "month", value: String(parts.month!)),
+            URLQueryItem(name: "day", value: String(parts.day!)),
+            URLQueryItem(name: "rformat", value: "json")
+        ]
+        return items
     }
 
     private func fetch<T: Decodable>(_ type: WeatherDataType, lang: String) async throws -> T {
