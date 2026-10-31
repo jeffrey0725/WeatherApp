@@ -59,6 +59,7 @@ PYTHON
     WeatherApp/Model/NineDayForecastChart.swift \
     WeatherApp/Model/NearbyWeather.swift \
     WeatherApp/Model/HKOOpenDataTable.swift \
+    WeatherApp/Model/ForegroundRefreshGate.swift \
     WeatherApp/Model/MoonTimes.swift \
     WeatherApp/Model/TideTimes.swift \
     WeatherApp/Manager/LocationManager.swift \
@@ -85,6 +86,7 @@ PYTHON
     WeatherAppTests/NineDayForecastChartTests.swift \
     WeatherAppTests/NearbyWeatherTests.swift \
     WeatherAppTests/MoonTidesTests.swift \
+    WeatherAppTests/ForegroundRefreshGateTests.swift \
     -o "$test_bundle/Contents/MacOS/HKOTests"
 "$developer_dir/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/xctest" "$test_bundle"
 

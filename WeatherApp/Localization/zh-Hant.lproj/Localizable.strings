@@ -223,3 +223,8 @@
 "tide_next_unavailable" = "暫時無法取得下一次潮汐時間，請重新整理。";
 "tide_day_changed" = "這些是之前日期的時間，請重新整理以取得今天的潮汐時間。";
 "tide_note" = "這是天文潮預測，實際海水位可能不同，尤其在風暴及颱風期間。不適用於導航。";
+"weather_warning_partial_details" = "未能載入警告全文及預警八號熱帶氣旋警告信號特別報告。";
+"weather_warning_partial_tips" = "未能載入特別天氣提示。";
+"weather_warning_partial_empty" = "警告摘要沒有列出生效的天氣警告，但未能載入警告全文及特別報告，因此未能確認現時沒有警告。";
+"weather_previous_partial_empty" = "上次成功查詢時，警告摘要沒有列出生效的天氣警告，但未能載入警告全文及特別報告。";
+"weather_warning_details_unavailable" = "未能載入此警告的全文，請重新整理。";

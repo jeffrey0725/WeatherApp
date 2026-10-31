@@ -9,6 +9,9 @@ class WeatherUITestCase: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
+        // The launch-screenshot tests run in every orientation and leave the simulator rotated, which would
+        // start the next run in landscape and fail layout-dependent tests, so start every test upright.
+        XCUIDevice.shared.orientation = .portrait
     }
 
     func launchApp(language: String = "en", unit: String = "celsius", appearance: String = "system") -> XCUIApplication {
@@ -17,6 +20,7 @@ class WeatherUITestCase: XCTestCase {
                                 "-weather.settings.language", language,
                                 "-weather.settings.temperatureUnit", unit,
                                 "-weather.settings.appearance", appearance,
+                                "-weather.settings.tideStation", "QUB",
                                 "-uitest-in-memory-favorites"]
         app.launch()
         return app
@@ -222,28 +226,6 @@ final class MoonTidesUITests: WeatherUITestCase {
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", "Cheung Chau ·"))
             .firstMatch.waitForExistence(timeout: networkTimeout), "Tides should reload for the chosen station")
         XCTAssertFalse(quarryBay.exists, "The previous station's tides must not stay on screen")
-    }
-}
-
-// TEMP-SCREENSHOTS: removed after the visual review.
-final class TempScreenshotUITests: WeatherUITestCase {
-    func testScreenshots() throws {
-        for (language, appearance, link, station) in [("en", "light", "Moon & tides", "Quarry Bay ·"),
-                                                      ("zh-Hant", "dark", "月亮與潮汐", "鰂魚涌 ·")] {
-            let app = launchApp(language: language, appearance: appearance)
-            openWeatherLink(app, link)
-            XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", station))
-                .firstMatch.waitForExistence(timeout: networkTimeout))
-            sleep(2)
-            for (index, name) in ["top", "bottom"].enumerated() {
-                if index == 1 { app.swipeUp(); sleep(1) }
-                let shot = XCTAttachment(screenshot: app.screenshot())
-                shot.name = "\(language)-\(appearance)-\(name)"
-                shot.lifetime = .keepAlways
-                add(shot)
-            }
-            app.terminate()
-        }
     }
 }
 

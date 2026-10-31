@@ -35,6 +35,9 @@ struct TwoColumnWhenWide<Leading: View, Trailing: View>: View {
     private func column<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: spacing) { content() }
             .frame(maxWidth: .infinity, alignment: .topLeading)
+            // Side by side, the stack proposes its measured height to each column; text that wraps onto more
+            // lines than were measured (large text sizes) was cut off with an ellipsis. Take the ideal height.
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
 

@@ -17,7 +17,7 @@ struct WeatherWarningsView: View {
                                             isRefreshing: weatherViewModel.isLoading, retry: retry) { report in
                     DashboardWarningsView(report: report, lastChecked: weatherViewModel.lastChecked,
                                           isPrevious: weatherViewModel.isLoading || weatherViewModel.errorMessage != nil,
-                                          showsAllWarningsLink: false)
+                                          showsAllWarningsLink: false, retry: retry)
                 }
                 if weatherViewModel.lastChecked == nil && !weatherViewModel.isLoading {
                     Text(settings.text("weather_warning_status_unknown"))

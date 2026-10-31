@@ -109,12 +109,29 @@ struct WeatherService {
         return try row.tideDay(year: year)
     }
 
+    /// The warning summary decides which warnings are active, so it is required: without it no report is
+    /// published and no all-clear can be shown. The statements and the special tips only add detail, so a
+    /// failure there is recorded in `missingParts` instead of hiding the active warnings.
     func warningReport(lang: String) async throws -> WeatherWarningReport {
-        async let summary = warningSummary(lang: lang)
-        async let information = warningInformation(lang: lang)
-        async let tips = specialTips(lang: lang)
-        // Publish a warning snapshot only when all three requests succeed.
-        return try await WeatherWarningReport(summary: summary, information: information, tips: tips)
+        async let summaryRequest = warningSummary(lang: lang)
+        async let informationRequest = optionalPart { try await warningInformation(lang: lang) }
+        async let tipsRequest = optionalPart { try await specialTips(lang: lang) }
+        let summary = try await summaryRequest
+        let information = try await informationRequest
+        let tips = try await tipsRequest
+        var report = WeatherWarningReport(summary: summary, information: information ?? WeatherWarningInformation(),
+                                          tips: tips ?? SpecialWeatherTips())
+        if information == nil { report.missingParts.insert(.information) }
+        if tips == nil { report.missingParts.insert(.tips) }
+        return report
+    }
+
+    // A failed optional request becomes nil, but cancellation must still end the whole report.
+    private func optionalPart<T>(_ load: () async throws -> T) async throws -> T? {
+        do { return try await load() }
+        catch is CancellationError { throw CancellationError() }
+        catch let error as URLError where error.code == .cancelled { throw error }
+        catch { return nil }
     }
 
     // The opendata.php tables are requested one Hong Kong date at a time and carry no language.

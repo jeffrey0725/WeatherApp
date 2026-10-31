@@ -17,11 +17,14 @@ struct WeatherWarningSnapshot {
         return isRefreshing || hasError ? .previous : .current
     }
 
+    // Pre-No. 8 announcements come from the statements, not the summary, so without them an empty summary
+    // cannot be called an all-clear. Missing special tips do not change what the summary says.
     var emptyMessageKey: String {
+        let announcementsMissing = report.missingParts.contains(.information)
         switch state {
         case .unavailable: return "weather_warning_status_unknown"
-        case .current: return "weather_no_warnings"
-        case .previous: return "weather_previous_no_warnings"
+        case .current: return announcementsMissing ? "weather_warning_partial_empty" : "weather_no_warnings"
+        case .previous: return announcementsMissing ? "weather_previous_partial_empty" : "weather_previous_no_warnings"
         }
     }
 

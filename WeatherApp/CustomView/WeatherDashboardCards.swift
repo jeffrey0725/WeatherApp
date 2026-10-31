@@ -134,6 +134,8 @@ struct DashboardWarningsView: View {
     let lastChecked: Date?
     let isPrevious: Bool
     var showsAllWarningsLink = true
+    /// Offered when part of the report did not load.
+    var retry: (() -> Void)? = nil
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 60)) { context in
@@ -161,7 +163,9 @@ struct DashboardWarningsView: View {
                     if let warning = report.summary[key] {
                         NavigationLink {
                             WeatherWarningDetailView(title: warning.name ?? key,
-                                                     text: report.details(for: key, warning: warning, noDetailsText: settings.text("weather_warning_no_details")),
+                                                     text: report.detailsText(for: key, warning: warning,
+                                                              noDetailsText: settings.text("weather_warning_no_details"),
+                                                              unavailableText: settings.text("weather_warning_details_unavailable")),
                                                      timestamp: warning.updateTime, isPrevious: isPrevious)
                         } label: {
                             VStack(alignment: .leading, spacing: 6) {
@@ -192,6 +196,22 @@ struct DashboardWarningsView: View {
                     if let text = tip.desc, !text.isEmpty {
                         announcement(title: "weather_special_tips", text: text, timestamp: tip.updateTime)
                     }
+                }
+                // The active warnings above come from the summary alone; say what else is missing.
+                if snapshot.state != .unavailable, !report.missingParts.isEmpty {
+                    VStack(alignment: .leading, spacing: 6) {
+                        // With no active warnings the empty-state message above already says this.
+                        if report.missingParts.contains(.information), !keys.isEmpty {
+                            Label(settings.text("weather_warning_partial_details"), systemImage: "exclamationmark.circle")
+                                .foregroundStyle(.secondary)
+                        }
+                        if report.missingParts.contains(.tips) {
+                            Label(settings.text("weather_warning_partial_tips"), systemImage: "exclamationmark.circle")
+                                .foregroundStyle(.secondary)
+                        }
+                        if let retry { Button(settings.text("weather_retry"), action: retry).frame(minHeight: 44) }
+                    }
+                    .font(.subheadline)
                 }
                 if showsAllWarningsLink {
                     NavigationLink(settings.text("weather_all_warnings")) { WeatherWarningsView() }.font(.subheadline)

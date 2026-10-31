@@ -6,19 +6,21 @@ extension View {
     }
 }
 
+// Every screen that uses this also reloads in `.task(id:)` when it appears, so a covered screen skips the
+// foreground refresh (see ForegroundRefreshGate) and catches up when the user returns to it.
 private struct WeatherActivationRefresh: ViewModifier {
     @Environment(\.scenePhase) private var scenePhase
-    @State private var needsRefresh = false
+    @State private var gate = ForegroundRefreshGate()
     let action: @MainActor () async -> Void
 
     func body(content: Content) -> some View {
-        content.onChange(of: scenePhase) { _, phase in
-            if phase == .background { needsRefresh = true }
-            if phase == .active && needsRefresh {
-                needsRefresh = false
-                Task { await action() }
+        content
+            .onAppear { gate.isVisible = true }
+            .onDisappear { gate.isVisible = false }
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .background { gate.sceneEnteredBackground() }
+                if phase == .active && gate.sceneBecameActive() { Task { await action() } }
             }
-        }
     }
 }
 

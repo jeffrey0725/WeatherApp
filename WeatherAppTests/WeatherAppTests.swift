@@ -244,22 +244,87 @@ final class WeatherAppTests: XCTestCase {
         }
     }
 
-    func testWarningSnapshotRequiresAllEndpointsToSucceed() {
-        WeatherMockURLProtocol.handler = { request in
-            let items = URLComponents(url: try XCTUnwrap(request.url), resolvingAgainstBaseURL: false)?.queryItems
-            if items?.first(where: { $0.name == "dataType" })?.value == "warningInfo" {
-                return try Self.response(request, status: 503, body: "{}")
-            }
-            return try Self.response(request, body: #"{"WHOT":{"code":"WHOT","actionCode":"ISSUE"}}"#)
-        }
+    func testWarningReportKeepsActiveWarningsWhenOnlyTheDetailsFailToLoad() {
+        // The summary alone decides which warnings are active; the statements and tips only add detail.
+        let cases: [(failing: Set<String>, missing: Set<WeatherWarningReport.Part>)] = [
+            ([], []), (["warningInfo"], [.information]), (["swt"], [.tips]), (["warningInfo", "swt"], [.information, .tips])]
         performOnMainActor { service in
+            for item in cases {
+                WeatherMockURLProtocol.handler = { request in
+                    if item.failing.contains(try Self.query(request)["dataType"] ?? "") {
+                        return try Self.response(request, status: 503, body: "{}")
+                    }
+                    return try Self.dashboardResponse(request)
+                }
+                let report = try await service.warningReport(lang: "en")
+                XCTAssertEqual(report.activeWarningKeys(), ["WHOT"], "failing: \(item.failing)")
+                XCTAssertEqual(report.missingParts, item.missing, "failing: \(item.failing)")
+                XCTAssertEqual(report.information.details == nil, item.missing.contains(.information))
+            }
+        }
+    }
+
+    func testWarningReportIsNotPublishedWithoutTheSummary() {
+        // Without the summary nothing is known about active warnings, so no report (and no all-clear) exists.
+        WeatherMockURLProtocol.handler = { try Self.dashboardResponse($0, failingType: "warnsum") }
+        performOnMainActor { service in
+            do { _ = try await service.warningReport(lang: "en"); XCTFail("Expected the summary failure to surface") }
+            catch { XCTAssertEqual(error as? WeatherServiceError, .httpStatus(503)) }
             let model = WeatherViewModel(service: service)
             await model.loadWarnings(lang: "tc")
             XCTAssertFalse(model.isLoading)
             XCTAssertNotNil(model.errorMessage)
             XCTAssertNil(model.lastChecked)
             XCTAssertTrue(model.warningReport.summary.isEmpty)
+            XCTAssertTrue(model.warningReport.missingParts.isEmpty)
         }
+    }
+
+    func testWarningViewModelPublishesPartialReportWithCheckTimeAndNoError() {
+        WeatherMockURLProtocol.handler = { try Self.dashboardResponse($0, failingType: "warningInfo") }
+        performOnMainActor { service in
+            let model = WeatherViewModel(service: service)
+            await model.loadWarnings(lang: "en")
+            XCTAssertNil(model.errorMessage)
+            XCTAssertNotNil(model.lastChecked)
+            XCTAssertEqual(model.warningReport.activeWarningKeys(), ["WHOT"])
+            XCTAssertEqual(model.warningReport.missingParts, [.information])
+            let snapshot = WeatherWarningSnapshot(report: model.warningReport, lastChecked: model.lastChecked,
+                                                  isRefreshing: model.isLoading, hasError: model.errorMessage != nil)
+            XCTAssertEqual(snapshot.state, .current)
+            XCTAssertEqual(snapshot.activeWarningKeys(at: Date()), ["WHOT"])
+        }
+    }
+
+    func testWarningRequestCancellationEndsTheWholeReportInsteadOfBecomingMissingDetails() {
+        WeatherMockURLProtocol.handler = { request in
+            if try Self.query(request)["dataType"] == "warningInfo" { throw URLError(.cancelled) }
+            return try Self.dashboardResponse(request)
+        }
+        performOnMainActor { service in
+            do { _ = try await service.warningReport(lang: "en"); XCTFail("A cancelled request must not look like a partial report") }
+            catch { XCTAssertEqual((error as? URLError)?.code, .cancelled) }
+            let model = WeatherViewModel(service: service)
+            await model.loadWarnings(lang: "en")
+            XCTAssertNil(model.lastChecked)
+            XCTAssertNil(model.errorMessage)
+        }
+    }
+
+    func testWarningStatementThatFailedToLoadIsNotReportedAsHavingNoDetails() throws {
+        let summary: WeatherWarningSummary = try decode(#"{"WHOT":{"code":"WHOT","actionCode":"ISSUE"}}"#)
+        let info: WeatherWarningInformation = try decode(#"{"details":[{"warningStatementCode":"WHOT","contents":["Drink water."]}]}"#)
+        let warning = try XCTUnwrap(summary["WHOT"])
+        func text(_ report: WeatherWarningReport) -> String {
+            report.detailsText(for: "WHOT", warning: warning, noDetailsText: "no details", unavailableText: "not loaded")
+        }
+        XCTAssertEqual(text(WeatherWarningReport(summary: summary, information: info)), "Drink water.")
+        XCTAssertEqual(text(WeatherWarningReport(summary: summary)), "no details", "A loaded report without a statement")
+        var failed = WeatherWarningReport(summary: summary)
+        failed.missingParts = [.information]
+        XCTAssertEqual(text(failed), "not loaded", "A report whose statements failed to load")
+        failed.missingParts = [.tips]
+        XCTAssertEqual(text(failed), "no details", "Missing tips say nothing about the statements")
     }
 
     func testCurrentReportMapsBothStationLanguagesAndKeepsUnknownStations() {
@@ -372,8 +437,23 @@ final class WeatherAppTests: XCTestCase {
         }
     }
 
-    func testDashboardWarningFailureDoesNotPublishAnEmptyWarningReport() {
+    func testDashboardShowsActiveWarningsWhenWarningStatementsFail() {
         WeatherMockURLProtocol.handler = { try Self.dashboardResponse($0, failingType: "warningInfo") }
+        performOnMainActor { service in
+            let model = WeatherDashboardViewModel(service: service)
+            await model.refresh(lang: "tc")
+            XCTAssertEqual(model.warnings.value?.activeWarningKeys(), ["WHOT"])
+            XCTAssertEqual(model.warnings.value?.missingParts, [.information])
+            XCTAssertNotNil(model.warnings.lastChecked)
+            XCTAssertNil(model.warnings.errorMessage)
+            XCTAssertFalse(model.warnings.isLoading)
+            XCTAssertNotNil(model.current.value)
+            XCTAssertFalse(model.isLoading)
+        }
+    }
+
+    func testDashboardWarningSummaryFailureDoesNotPublishAnEmptyWarningReport() {
+        WeatherMockURLProtocol.handler = { try Self.dashboardResponse($0, failingType: "warnsum") }
         performOnMainActor { service in
             let model = WeatherDashboardViewModel(service: service)
             await model.refresh(lang: "tc")

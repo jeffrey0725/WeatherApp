@@ -57,7 +57,6 @@ struct MoonTidesView: View {
             .pickerStyle(.menu)
             .labelsHidden()
             .frame(minHeight: 44)
-            .accessibilityLabel(settings.text("tide_station"))
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 8)

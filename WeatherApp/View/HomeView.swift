@@ -17,7 +17,7 @@ struct HomeView: View {
                     }
                     WeatherDashboardSectionView(title: "weather_warnings_title", section: viewModel.warnings, isRefreshing: viewModel.isLoading, retry: retry) { report in
                         DashboardWarningsView(report: report, lastChecked: viewModel.warnings.lastChecked,
-                                              isPrevious: viewModel.warnings.errorMessage != nil)
+                                              isPrevious: viewModel.warnings.errorMessage != nil, retry: retry)
                     }
                     DashboardFavoriteStationsView(section: viewModel.current, isRefreshing: viewModel.isLoading, retry: retry)
                     shortcut(icon: "map.fill", title: "weather_regional_shortcut", subtitle: "weather_regional_description") {

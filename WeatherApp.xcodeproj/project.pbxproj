@@ -33,6 +33,7 @@
 		4C6317133B0A590573B79471 /* WeatherRequestCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25D31E7E716BC77E963E01D /* WeatherRequestCoordinator.swift */; };
 		4F6D08B3E52C6A309FD73B17 /* MoonTidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E767A57BD6C58CDA75A0B1A4 /* MoonTidesView.swift */; };
 		58B61054FB08F6E1D93FF093 /* RegionalStationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85ED1CDCDE77EC8D69C9FC22 /* RegionalStationListView.swift */; };
+		5AA50EB55FD7AFEC8D855821 /* ForegroundRefreshGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8260D70BD439B64D077320B2 /* ForegroundRefreshGateTests.swift */; };
 		605ECA054AE957E347CDE148 /* FavoriteStationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39DBF0FCE4825F36E41C6366 /* FavoriteStationStore.swift */; };
 		633A5F5FFE9493061849ECC6 /* NineDayForecastChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7FEFF4977CBDAA4B1B95E5 /* NineDayForecastChartTests.swift */; };
 		64733B368221B53DD125037F /* HourlyRainfallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603F4BB26FFF00AE7F382B55 /* HourlyRainfallView.swift */; };
@@ -44,6 +45,7 @@
 		7B0F6FB254B5AAEFE2826668 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 33F1735B0F49CA05D780A00F /* PrivacyInfo.xcprivacy */; };
 		7F3F24380FC1F7A14DAB6592 /* RegionMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA61B59A478DC5C319D7BF8 /* RegionMapView.swift */; };
 		84ACD50B53819A2840EE4303 /* WeatherStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501BCCDD25FA2CDB3C115552 /* WeatherStatusView.swift */; };
+		90203DEBB8874DC6DA684A51 /* ForegroundRefreshGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A836AFF7BD25034F007E7C /* ForegroundRefreshGate.swift */; };
 		9699DC24E31A575DCBF7CAD6 /* RainfallMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BACFFFC670D39BBA66CB61 /* RainfallMap.swift */; };
 		9AEE630BEABA898670321559 /* NineDayForecastChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C672A68B5E648C116F153 /* NineDayForecastChart.swift */; };
 		9B0C56631D36532BC81F8D61 /* WeatherWarningsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A268C166D8269A967BB1D47 /* WeatherWarningsView.swift */; };
@@ -138,6 +140,7 @@
 		6C01A3C6AE6A546A616526C4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6D83B467FD6E899DDF3AF5E0 /* RegionalWeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalWeatherDetailView.swift; sourceTree = "<group>"; };
 		7B402289B0DBDAE0F5423743 /* DashboardFavoriteStationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardFavoriteStationsView.swift; sourceTree = "<group>"; };
+		8260D70BD439B64D077320B2 /* ForegroundRefreshGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForegroundRefreshGateTests.swift; sourceTree = "<group>"; };
 		85ED1CDCDE77EC8D69C9FC22 /* RegionalStationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalStationListView.swift; sourceTree = "<group>"; };
 		897BE9FCF76D935A05A1D67E /* RollingBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingBannerView.swift; sourceTree = "<group>"; };
 		8D8FCB5EE9E4013F042B2AD2 /* RainfallStationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainfallStationSheet.swift; sourceTree = "<group>"; };
@@ -186,6 +189,7 @@
 		F12C672A68B5E648C116F153 /* NineDayForecastChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineDayForecastChart.swift; sourceTree = "<group>"; };
 		F2B6F4A8F7DF905D3EBAFAFB /* RegionalWeatherBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalWeatherBottomSheetView.swift; sourceTree = "<group>"; };
 		F397EC220B905448C67192A1 /* AppSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsTests.swift; sourceTree = "<group>"; };
+		F6A836AFF7BD25034F007E7C /* ForegroundRefreshGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForegroundRefreshGate.swift; sourceTree = "<group>"; };
 		F6D3FF3547458E98262704E6 /* WeatherDashboardCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDashboardCards.swift; sourceTree = "<group>"; };
 		F823664034AE6B53B301F234 /* RainfallMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainfallMapTests.swift; sourceTree = "<group>"; };
 		FC7FEFF4977CBDAA4B1B95E5 /* NineDayForecastChartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineDayForecastChartTests.swift; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 			children = (
 				DF9B511CCD73C6AF385891D8 /* AppSettings.swift */,
 				4E61D3118D0777255CCF150E /* FavoriteStation.swift */,
+				F6A836AFF7BD25034F007E7C /* ForegroundRefreshGate.swift */,
 				6603336B1A3DB2A9A9E3660C /* HKOOpenDataTable.swift */,
 				210E3C18C3F43CCC3ED7C836 /* HourlyRainfall.swift */,
 				ACBF8B41934774661D728441 /* MoonTimes.swift */,
@@ -226,6 +231,7 @@
 			children = (
 				F397EC220B905448C67192A1 /* AppSettingsTests.swift */,
 				C7DD48C872DB4D45B412A7A9 /* FavoriteStationTests.swift */,
+				8260D70BD439B64D077320B2 /* ForegroundRefreshGateTests.swift */,
 				088A92557BBFCE6A645E09A1 /* HourlyRainfallTests.swift */,
 				2D2F1ED65369BE1B6C92CDAD /* MoonTidesTests.swift */,
 				B1795C24D2675BBD8F85BC46 /* NearbyWeatherTests.swift */,
@@ -554,6 +560,7 @@
 				F469D79410A9ED4E69451E31 /* FavoriteStation.swift in Sources */,
 				605ECA054AE957E347CDE148 /* FavoriteStationStore.swift in Sources */,
 				2E3DC3A0663E455EE0E6C3E6 /* FavoriteStationsView.swift in Sources */,
+				90203DEBB8874DC6DA684A51 /* ForegroundRefreshGate.swift in Sources */,
 				658C2014E438D6CDF7AF009B /* HKOOpenDataTable.swift in Sources */,
 				14AB03DED17E7CA3C52DC5A1 /* HomeView.swift in Sources */,
 				E8FFBAC64593E11A0C5E92EE /* HourlyRainfall.swift in Sources */,
@@ -608,6 +615,7 @@
 			files = (
 				E30333C6818009018C6DF5D4 /* AppSettingsTests.swift in Sources */,
 				ABBEB3FD9B656DD6C3DAC603 /* FavoriteStationTests.swift in Sources */,
+				5AA50EB55FD7AFEC8D855821 /* ForegroundRefreshGateTests.swift in Sources */,
 				106AC0930315A8CE063F1D19 /* HourlyRainfallTests.swift in Sources */,
 				9CCA22BB41F11573439E86CC /* MoonTidesTests.swift in Sources */,
 				FEE49A6DC3AFCE9DF70D6EBA /* NearbyWeatherTests.swift in Sources */,

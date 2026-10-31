@@ -241,12 +241,24 @@ struct SpecialWeatherTip: Codable {
 }
 
 struct WeatherWarningReport {
+    /// Report parts that did not load. The summary decides which warnings are active, so it is required and
+    /// cannot be missing; the statements and the special tips only add detail.
+    enum Part: Hashable { case information, tips }
+
     var summary: WeatherWarningSummary = [:]
     var information = WeatherWarningInformation()
     var tips = SpecialWeatherTips()
+    var missingParts: Set<Part> = []
 
     func activeWarningKeys(at date: Date = Date()) -> [String] {
         summary.keys.filter { summary[$0]?.isActive(at: date) == true }.sorted()
+    }
+
+    /// A warning's statement, or why there is none: a statement that failed to load is not the same as a
+    /// warning that has no statement.
+    func detailsText(for key: String, warning: WeatherWarning, noDetailsText: String, unavailableText: String) -> String {
+        missingParts.contains(.information) ? unavailableText
+            : details(for: key, warning: warning, noDetailsText: noDetailsText)
     }
 
     func details(for key: String, warning: WeatherWarning,

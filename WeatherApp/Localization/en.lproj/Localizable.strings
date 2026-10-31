@@ -223,3 +223,8 @@
 "tide_next_unavailable" = "The next tide is unavailable. Refresh to try again.";
 "tide_day_changed" = "These times are for a previous date. Refresh for today’s tide times.";
 "tide_note" = "Astronomical predictions only: actual sea levels can differ, especially during storms and typhoons. Not for navigation.";
+"weather_warning_partial_details" = "Warning statements and Pre-No. 8 special announcements could not be loaded.";
+"weather_warning_partial_tips" = "Special weather tips could not be loaded.";
+"weather_warning_partial_empty" = "The warning summary lists no active warning signals, but warning statements and announcements could not be loaded, so this is not a confirmed all-clear.";
+"weather_previous_partial_empty" = "At the last successful check the warning summary listed no active warning signals, but warning statements and announcements could not be loaded.";
+"weather_warning_details_unavailable" = "This warning’s statement could not be loaded. Refresh to try again.";

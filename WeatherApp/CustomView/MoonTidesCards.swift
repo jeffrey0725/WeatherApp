@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MoonTimesCardContent: View {
     @EnvironmentObject private var settings: AppSettings
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let snapshot: MoonTimesSnapshot
     let now: Date
 
@@ -36,8 +37,9 @@ struct MoonTimesCardContent: View {
         }
     }
 
+    // One column at accessibility sizes, where two columns split "Moonrise" across lines.
     private func events(_ day: MoonDay) -> some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 130), alignment: .leading)],
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: dynamicTypeSize.isAccessibilitySize ? 240 : 130), alignment: .leading)],
                   alignment: .leading, spacing: 16) {
             event("moon_rise", icon: "moonrise.fill", time: day.moonrise)
             event("moon_set", icon: "moonset.fill", time: day.moonset)
@@ -65,7 +67,6 @@ struct TideTimesCardContent: View {
     let now: Date
 
     var body: some View {
-        let events = snapshot.events
         let next = snapshot.nextEvent(at: now)
         VStack(alignment: .leading, spacing: 16) {
             Text("\(snapshot.station.name(lang: settings.apiLanguageCode)) · \(SolarTimesFormatting.date(snapshot.today.date, locale: settings.locale)) · \(settings.text("solar_hong_kong_time"))")
@@ -87,19 +88,19 @@ struct TideTimesCardContent: View {
             }
 
             Divider()
-            list("times_today", date: snapshot.today.date, events: events, next: next)
+            list("times_today", date: snapshot.today.date, next: next)
             if let tomorrow = snapshot.nextDay {
-                list("times_tomorrow", date: tomorrow.date, events: events, next: next)
+                list("times_tomorrow", date: tomorrow.date, next: next)
             }
             Text(settings.text("tide_note")).font(.caption).foregroundStyle(.secondary)
         }
     }
 
-    private func list(_ titleKey: String, date: Date, events: [TideEvent], next: TideEvent?) -> some View {
+    private func list(_ titleKey: String, date: Date, next: TideEvent?) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("\(settings.text(titleKey)): \(SolarTimesFormatting.date(date, locale: settings.locale))")
                 .font(.subheadline.bold())
-            ForEach(events.filter { SolarDay.calendar.isDate($0.time, inSameDayAs: date) }) { event in
+            ForEach(snapshot.events(on: date)) { event in
                 row(event, isNext: event.id == next?.id)
             }
         }
